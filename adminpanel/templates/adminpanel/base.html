@@ -1,0 +1,50 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Admin Panel{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'adminpanel/css/styles.css' %}">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="glass p-4">
+    <h1>{% block header %}Admin Panel{% endblock %}</h1>
+    <a href="{% url 'adminpanel:admin_logout' %}" class="btn btn-danger">Logout</a>
+</nav>
+
+<!-- SIDEBAR + CONTENT WRAPPER -->
+<div style="display:flex; margin-top: 80px;">
+    <!-- SIDEBAR -->
+    <aside class="glass p-6" style="width: 220px; min-height: calc(100vh - 80px); margin-right: 20px;">
+        <ul style="list-style:none; padding-left:0;">
+            <li><a href="{% url 'adminpanel:dashboard' %}" class="btn btn-secondary mb-3 w-full text-left">Dashboard</a></li>
+            <li><a href="{% url 'adminpanel:user_list' %}" class="btn btn-secondary mb-3 w-full text-left">👥 Users</a></li>
+            <li><a href="{% url 'adminpanel:add_user' %}" class="btn btn-secondary mb-3 w-full text-left">➕ Add User</a></li>
+            <li><a href="{% url 'adminpanel:add_admin' %}" class="btn btn-secondary mb-3 w-full text-left">➕ Add New Admin</a></li>
+        </ul>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main style="flex:1;">
+        <!-- SUCCESS / ERROR MESSAGES -->
+        {% if messages %}
+        <div class="glass p-4 mb-6">
+            {% for message in messages %}
+            <div class="p-3 mb-2 {% if message.tags == 'error' %}btn-danger{% else %}btn-primary{% endif %}">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <!-- PAGE CONTENT -->
+        {% block content %}{% endblock %}
+    </main>
+</div>
+
+<script src="{% static 'adminpanel/js/script.js' %}"></script>
+</body>
+</html>

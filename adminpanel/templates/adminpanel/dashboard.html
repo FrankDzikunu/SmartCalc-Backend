@@ -1,0 +1,107 @@
+{% extends "adminpanel/base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block header %}
+Dashboard Overview
+{% endblock %}
+
+{% block content %}
+
+<!-- Greeting -->
+<h2 class="text-2xl font-semibold mb-6 text-white">Welcome, {{ request.user.username }} </h2>
+
+<!-- Stats Section -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+  <!-- Card: Total Users -->
+  <div class="glass p-6 rounded-2xl shadow-lg text-white">
+    <h3 class="text-lg font-medium mb-2">Total Users</h3>
+    <p class="text-4xl font-bold">{{ total_users }}</p>
+  </div>
+
+  <!-- Card: Active Admins -->
+  <div class="glass p-6 rounded-2xl shadow-lg text-white">
+    <h3 class="text-lg font-medium mb-2">Active Admins</h3>
+    <p class="text-4xl font-bold">{{ admin_count }}</p>
+  </div>
+
+  <!-- Card: Normal Users -->
+  <div class="glass p-6 rounded-2xl shadow-lg hover:scale-105 transition">
+    <h3 class="text-xl font-semibold mb-2">Normal Users</h3>
+    <p class="text-3xl font-bold">{{ normal_users }}</p>
+  </div>
+
+  <!-- Card: Last Login -->
+  <div class="glass p-6 rounded-2xl shadow-lg text-white">
+    <h3 class="text-lg font-medium mb-2">Your Last Login</h3>
+    <p class="text-xl">{{ request.user.last_login }}</p>
+  </div>
+
+</div>
+
+<!-- Quick Actions -->
+<div class="mt-10">
+
+  <h3 class="text-xl font-semibold mb-4 text-white">Quick Actions</h3>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+    <!-- Create User Button -->
+    <a href="{% url 'adminpanel:add_user' %}"
+      class="glass p-6 rounded-2xl shadow-lg text-white hover:bg-white/20 transition">
+      <h4 class="text-lg font-semibold">➕ Create New User</h4>
+      <p>Add new system users with admin rights.</p>
+    </a>
+
+    <!-- Manage Users Button -->
+    <a href="{% url 'adminpanel:user_list' %}"
+      class="glass p-6 rounded-2xl shadow-lg text-white hover:bg-white/20 transition">
+      <h4 class="text-lg font-semibold">👥 Manage Users</h4>
+      <p>View, update or remove users from the system.</p>
+    </a>
+
+  </div>
+</div>
+
+<!-- Recent Users Table -->
+<div class="glass p-6 rounded-2xl shadow-lg overflow-x-auto mt-10">
+
+  <h3 class="text-xl font-semibold mb-4 text-white">Recent Users</h3>
+
+  {% if recent_users %}
+  <table class="min-w-full text-white">
+    <thead>
+      <tr class="border-b border-white/10 text-left">
+        <th class="py-3 px-4">Username</th>
+        <th class="py-3 px-4">Email</th>
+        <th class="py-3 px-4">Role</th>
+        <th class="py-3 px-4">Created At</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {% for user in recent_users %}
+      <tr class="border-b border-white/10 hover:bg-white/10 transition">
+        <td class="py-3 px-4">{{ user.username }}</td>
+        <td class="py-3 px-4">{{ user.email }}</td>
+        <td class="py-3 px-4">
+          {% if user.is_superuser %}
+            <span class="px-3 py-1 bg-purple-600 rounded-lg text-sm">Admin</span>
+          {% else %}
+            <span class="px-3 py-1 bg-blue-600 rounded-lg text-sm">User</span>
+          {% endif %}
+        </td>
+        <td class="py-3 px-4">{{ user.date_joined|date:"M d, Y" }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  {% else %}
+    <p class="text-white text-center py-10">No recent users.</p>
+  {% endif %}
+
+</div>
+
+{% endblock %}

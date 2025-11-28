@@ -1,0 +1,43 @@
+{% extends "adminpanel/base.html" %}
+
+{% block title %}Delete User{% endblock %}
+
+{% block header %}
+Delete User
+{% endblock %}
+
+{% block content %}
+
+<div class="glass p-10 rounded-2xl max-w-xl mx-auto text-center text-white shadow-xl">
+
+    <h2 class="text-2xl font-semibold mb-4">Are you sure?</h2>
+
+    <p class="mb-6 text-lg">
+        You are about to delete user:
+        <span class="font-bold text-red-300">{{ user.username }}</span>
+        <br>
+        This action cannot be undone.
+    </p>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <div class="flex justify-center space-x-6 mt-8">
+
+            <a href="{% url 'user_list' %}"
+               class="px-6 py-3 rounded-xl bg-gray-500 hover:bg-gray-600 text-white transition shadow">
+                Cancel
+            </a>
+
+            <button type="submit"
+                    class="px-6 py-3 rounded-xl bg-red-600 hover:bg-red-700 text-white transition shadow-lg">
+                Delete User
+            </button>
+
+        </div>
+
+    </form>
+
+</div>
+
+{% endblock %}
