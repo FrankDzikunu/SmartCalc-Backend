@@ -8,100 +8,378 @@ Dashboard Overview
 
 {% block content %}
 
-<!-- Greeting -->
-<h2 class="text-2xl font-semibold mb-6 text-white">Welcome, {{ request.user.username }} </h2>
+<!-- ================================
+     WELCOME SECTION
+================================ -->
+<div style="margin-bottom: 32px;">
+    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
+        <div>
+            <h2 style="font-size: 32px; font-weight: 700; color: #0d47a1; margin-bottom: 8px; letter-spacing: -0.5px;">
+                Welcome back, {{ request.user.username }}! 👋
+            </h2>
+            <p style="font-size: 16px; color: #64748b; margin: 0;">
+                Here's what's happening with your system today.
+            </p>
+        </div>
+        <div style="display: flex; gap: 12px;">
+            <button class="btn btn-secondary" onclick="window.location.reload()" style="display: flex; align-items: center; gap: 8px;">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="23 4 23 10 17 10"/>
+                    <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+                </svg>
+                Refresh
+            </button>
+        </div>
+    </div>
+</div>
 
-<!-- Stats Section -->
-<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- ================================
+     STATISTICS CARDS
+================================ -->
+<div class="grid grid-cols-3" style="margin-bottom: 40px;">
+    
+    <!-- Total Users Card -->
+    <div class="stat-card" style="position: relative; overflow: hidden;">
+        <div style="position: absolute; top: -20px; right: -20px; width: 100px; height: 100px; background: linear-gradient(135deg, rgba(30, 136, 229, 0.1), rgba(8, 145, 178, 0.05)); border-radius: 50%; filter: blur(30px);"></div>
+        
+        <div style="position: relative; z-index: 1;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+                <div style="width: 48px; height: 48px; background: linear-gradient(135deg, #1e88e5, #0891b2); border-radius: 12px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(30, 136, 229, 0.3);">
+                    <svg width="24" height="24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                        <circle cx="9" cy="7" r="4"/>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                    </svg>
+                </div>
+                <span class="badge badge-success" style="font-size: 11px;">+12% this month</span>
+            </div>
+            
+            <h3 style="font-size: 15px; font-weight: 600; color: #64748b; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">
+                Total Users
+            </h3>
+            <p style="font-size: 36px; font-weight: 700; color: #0d47a1; margin: 0; line-height: 1;">
+                {{ total_users }}
+            </p>
+            
+            <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid #e2e8f0;">
+                <a href="{% url 'adminpanel:user_list' %}" style="color: #1e88e5; text-decoration: none; font-size: 13px; font-weight: 500; display: flex; align-items: center; gap: 6px;">
+                    View all users
+                    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="5" y1="12" x2="19" y2="12"/>
+                        <polyline points="12 5 19 12 12 19"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </div>
 
-  <!-- Card: Total Users -->
-  <div class="glass p-6 rounded-2xl shadow-lg text-white">
-    <h3 class="text-lg font-medium mb-2">Total Users</h3>
-    <p class="text-4xl font-bold">{{ total_users }}</p>
-  </div>
+    <!-- Active Admins Card -->
+    <div class="stat-card" style="position: relative; overflow: hidden;">
+        <div style="position: absolute; top: -20px; right: -20px; width: 100px; height: 100px; background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(124, 58, 237, 0.05)); border-radius: 50%; filter: blur(30px);"></div>
+        
+        <div style="position: relative; z-index: 1;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+                <div style="width: 48px; height: 48px; background: linear-gradient(135deg, #8b5cf6, #7c3aed); border-radius: 12px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);">
+                    <svg width="24" height="24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                        <path d="M2 17l10 5 10-5"/>
+                        <path d="M2 12l10 5 10-5"/>
+                    </svg>
+                </div>
+                <span class="badge" style="background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(124, 58, 237, 0.1)); color: #7c3aed; font-size: 11px;">Active</span>
+            </div>
+            
+            <h3 style="font-size: 15px; font-weight: 600; color: #64748b; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">
+                Active Admins
+            </h3>
+            <p style="font-size: 36px; font-weight: 700; color: #0d47a1; margin: 0; line-height: 1;">
+                {{ admin_count }}
+            </p>
+            
+            <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid #e2e8f0;">
+                <a href="{% url 'adminpanel:add_admin' %}" style="color: #8b5cf6; text-decoration: none; font-size: 13px; font-weight: 500; display: flex; align-items: center; gap: 6px;">
+                    Add new admin
+                    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="5" x2="12" y2="19"/>
+                        <line x1="5" y1="12" x2="19" y2="12"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </div>
 
-  <!-- Card: Active Admins -->
-  <div class="glass p-6 rounded-2xl shadow-lg text-white">
-    <h3 class="text-lg font-medium mb-2">Active Admins</h3>
-    <p class="text-4xl font-bold">{{ admin_count }}</p>
-  </div>
-
-  <!-- Card: Normal Users -->
-  <div class="glass p-6 rounded-2xl shadow-lg hover:scale-105 transition">
-    <h3 class="text-xl font-semibold mb-2">Normal Users</h3>
-    <p class="text-3xl font-bold">{{ normal_users }}</p>
-  </div>
-
-  <!-- Card: Last Login -->
-  <div class="glass p-6 rounded-2xl shadow-lg text-white">
-    <h3 class="text-lg font-medium mb-2">Your Last Login</h3>
-    <p class="text-xl">{{ request.user.last_login }}</p>
-  </div>
+    <!-- Normal Users Card -->
+    <div class="stat-card" style="position: relative; overflow: hidden;">
+        <div style="position: absolute; top: -20px; right: -20px; width: 100px; height: 100px; background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.05)); border-radius: 50%; filter: blur(30px);"></div>
+        
+        <div style="position: relative; z-index: 1;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+                <div style="width: 48px; height: 48px; background: linear-gradient(135deg, #10b981, #059669); border-radius: 12px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);">
+                    <svg width="24" height="24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                        <circle cx="8.5" cy="7" r="4"/>
+                        <line x1="20" y1="8" x2="20" y2="14"/>
+                        <line x1="23" y1="11" x2="17" y2="11"/>
+                    </svg>
+                </div>
+                <span class="badge" style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(5, 150, 105, 0.1)); color: #059669; font-size: 11px;">Regular</span>
+            </div>
+            
+            <h3 style="font-size: 15px; font-weight: 600; color: #64748b; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">
+                Normal Users
+            </h3>
+            <p style="font-size: 36px; font-weight: 700; color: #0d47a1; margin: 0; line-height: 1;">
+                {{ normal_users }}
+            </p>
+            
+            <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid #e2e8f0;">
+                <a href="{% url 'adminpanel:add_user' %}" style="color: #10b981; text-decoration: none; font-size: 13px; font-weight: 500; display: flex; align-items: center; gap: 6px;">
+                    Create new user
+                    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="5" x2="12" y2="19"/>
+                        <line x1="5" y1="12" x2="19" y2="12"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </div>
 
 </div>
 
-<!-- Quick Actions -->
-<div class="mt-10">
-
-  <h3 class="text-xl font-semibold mb-4 text-white">Quick Actions</h3>
-
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-
-    <!-- Create User Button -->
-    <a href="{% url 'adminpanel:add_user' %}"
-      class="glass p-6 rounded-2xl shadow-lg text-white hover:bg-white/20 transition">
-      <h4 class="text-lg font-semibold">➕ Create New User</h4>
-      <p>Add new system users with admin rights.</p>
-    </a>
-
-    <!-- Manage Users Button -->
-    <a href="{% url 'adminpanel:user_list' %}"
-      class="glass p-6 rounded-2xl shadow-lg text-white hover:bg-white/20 transition">
-      <h4 class="text-lg font-semibold">👥 Manage Users</h4>
-      <p>View, update or remove users from the system.</p>
-    </a>
-
-  </div>
+<!-- ================================
+     LAST LOGIN INFO
+================================ -->
+<div class="glass" style="margin-bottom: 40px; background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(255, 255, 255, 0.95));">
+    <div style="display: flex; align-items: center; gap: 16px;">
+        <div style="width: 56px; height: 56px; background: linear-gradient(135deg, rgba(30, 136, 229, 0.1), rgba(8, 145, 178, 0.1)); border-radius: 14px; display: flex; align-items: center; justify-content: center; border: 2px solid rgba(30, 136, 229, 0.2);">
+            <svg width="28" height="28" fill="none" stroke="#1e88e5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12 6 12 12 16 14"/>
+            </svg>
+        </div>
+        <div style="flex: 1;">
+            <h3 style="font-size: 14px; font-weight: 600; color: #64748b; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px;">
+                Your Last Login
+            </h3>
+            <p style="font-size: 18px; font-weight: 600; color: #0d47a1; margin: 0;">
+                {{ request.user.last_login|date:"F d, Y - g:i A" }}
+            </p>
+        </div>
+    </div>
 </div>
 
-<!-- Recent Users Table -->
-<div class="glass p-6 rounded-2xl shadow-lg overflow-x-auto mt-10">
+<!-- ================================
+     QUICK ACTIONS
+================================ -->
+<div style="margin-bottom: 40px;">
+    <h3 style="font-size: 20px; font-weight: 700; color: #0d47a1; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 11 12 14 22 4"/>
+            <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+        </svg>
+        Quick Actions
+    </h3>
 
-  <h3 class="text-xl font-semibold mb-4 text-white">Recent Users</h3>
+    <div class="grid grid-cols-2">
+        
+        <!-- Create User Action -->
+        <a href="{% url 'adminpanel:add_user' %}" class="glass" style="text-decoration: none; transition: all 0.3s; position: relative; overflow: hidden; display: block;">
+            <div style="position: absolute; top: 0; right: 0; width: 120px; height: 120px; background: linear-gradient(135deg, rgba(30, 136, 229, 0.05), transparent); border-radius: 50%; transform: translate(40%, -40%);"></div>
+            
+            <div style="position: relative; z-index: 1;">
+                <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 16px;">
+                    <div style="width: 48px; height: 48px; background: linear-gradient(135deg, #1e88e5, #0891b2); border-radius: 12px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(30, 136, 229, 0.3);">
+                        <svg width="24" height="24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                            <circle cx="8.5" cy="7" r="4"/>
+                            <line x1="20" y1="8" x2="20" y2="14"/>
+                            <line x1="23" y1="11" x2="17" y2="11"/>
+                        </svg>
+                    </div>
+                    <h4 style="font-size: 18px; font-weight: 700; color: #0d47a1; margin: 0;">Create New User</h4>
+                </div>
+                <p style="color: #64748b; font-size: 14px; line-height: 1.6; margin: 0;">
+                    Add new system users with admin or regular user rights. Configure permissions and access levels.
+                </p>
+            </div>
+        </a>
 
-  {% if recent_users %}
-  <table class="min-w-full text-white">
-    <thead>
-      <tr class="border-b border-white/10 text-left">
-        <th class="py-3 px-4">Username</th>
-        <th class="py-3 px-4">Email</th>
-        <th class="py-3 px-4">Role</th>
-        <th class="py-3 px-4">Created At</th>
-      </tr>
-    </thead>
+        <!-- Manage Users Action -->
+        <a href="{% url 'adminpanel:user_list' %}" class="glass" style="text-decoration: none; transition: all 0.3s; position: relative; overflow: hidden; display: block;">
+            <div style="position: absolute; top: 0; right: 0; width: 120px; height: 120px; background: linear-gradient(135deg, rgba(139, 92, 246, 0.05), transparent); border-radius: 50%; transform: translate(40%, -40%);"></div>
+            
+            <div style="position: relative; z-index: 1;">
+                <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 16px;">
+                    <div style="width: 48px; height: 48px; background: linear-gradient(135deg, #8b5cf6, #7c3aed); border-radius: 12px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);">
+                        <svg width="24" height="24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                            <circle cx="9" cy="7" r="4"/>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                        </svg>
+                    </div>
+                    <h4 style="font-size: 18px; font-weight: 700; color: #0d47a1; margin: 0;">Manage Users</h4>
+                </div>
+                <p style="color: #64748b; font-size: 14px; line-height: 1.6; margin: 0;">
+                    View, update, or remove users from the system. Monitor user activity and manage accounts efficiently.
+                </p>
+            </div>
+        </a>
 
-    <tbody>
-      {% for user in recent_users %}
-      <tr class="border-b border-white/10 hover:bg-white/10 transition">
-        <td class="py-3 px-4">{{ user.username }}</td>
-        <td class="py-3 px-4">{{ user.email }}</td>
-        <td class="py-3 px-4">
-          {% if user.is_superuser %}
-            <span class="px-3 py-1 bg-purple-600 rounded-lg text-sm">Admin</span>
-          {% else %}
-            <span class="px-3 py-1 bg-blue-600 rounded-lg text-sm">User</span>
-          {% endif %}
-        </td>
-        <td class="py-3 px-4">{{ user.date_joined|date:"M d, Y" }}</td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+    </div>
+</div>
 
-  {% else %}
-    <p class="text-white text-center py-10">No recent users.</p>
-  {% endif %}
+<!-- ================================
+     RECENT USERS TABLE
+================================ -->
+<div class="glass">
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
+        <h3 style="font-size: 20px; font-weight: 700; color: #0d47a1; margin: 0; display: flex; align-items: center; gap: 10px;">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                <circle cx="9" cy="7" r="4"/>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+            </svg>
+            Recent Users
+        </h3>
+        
+        <div style="display: flex; gap: 12px;">
+            <input type="search" id="userSearch" placeholder="Search users..." style="width: 260px; padding: 10px 16px; border-radius: 10px; border: 2px solid #e2e8f0; font-size: 14px;" data-table-id="usersTable">
+            <a href="{% url 'adminpanel:user_list' %}" class="btn btn-primary" style="white-space: nowrap; display: flex; align-items: center; gap: 8px;">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="5" y1="12" x2="19" y2="12"/>
+                    <polyline points="12 5 19 12 12 19"/>
+                </svg>
+                View All
+            </a>
+        </div>
+    </div>
+
+    {% if recent_users %}
+    <div class="overflow-x-auto">
+        <table id="usersTable">
+            <thead>
+                <tr>
+                    <th style="border-radius: 12px 0 0 0;">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                <circle cx="12" cy="7" r="4"/>
+                            </svg>
+                            Username
+                        </div>
+                    </th>
+                    <th>
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="2" y="4" width="20" height="16" rx="2"/>
+                                <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+                            </svg>
+                            Email
+                        </div>
+                    </th>
+                    <th>
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                                <path d="M2 17l10 5 10-5"/>
+                            </svg>
+                            Role
+                        </div>
+                    </th>
+                    <th style="border-radius: 0 12px 0 0;">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                                <line x1="16" y1="2" x2="16" y2="6"/>
+                                <line x1="8" y1="2" x2="8" y2="6"/>
+                                <line x1="3" y1="10" x2="21" y2="10"/>
+                            </svg>
+                            Created At
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for user in recent_users %}
+                <tr>
+                    <td>
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <div style="width: 36px; height: 36px; background: linear-gradient(135deg, #1e88e5, #0891b2); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 14px;">
+                                {{ user.username|slice:":1"|upper }}
+                            </div>
+                            <span style="font-weight: 600; color: #0d47a1;">{{ user.username }}</span>
+                        </div>
+                    </td>
+                    <td style="color: #64748b; font-size: 14px;">{{ user.email }}</td>
+                    <td>
+                        {% if user.is_superuser %}
+                            <span class="badge badge-admin">
+                                <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: inline; vertical-align: middle; margin-right: 4px;">
+                                    <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                                    <path d="M2 17l10 5 10-5"/>
+                                </svg>
+                                Admin
+                            </span>
+                        {% else %}
+                            <span class="badge badge-user">
+                                <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: inline; vertical-align: middle; margin-right: 4px;">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <path d="M12 16v-4"/>
+                                    <path d="M12 8h.01"/>
+                                </svg>
+                                User
+                            </span>
+                        {% endif %}
+                    </td>
+                    <td style="color: #64748b; font-size: 14px;">
+                        <div style="display: flex; align-items: center; gap: 6px;">
+                            <svg width="14" height="14" fill="none" stroke="#64748b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"/>
+                                <polyline points="12 6 12 12 16 14"/>
+                            </svg>
+                            {{ user.date_joined|date:"M d, Y" }}
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% else %}
+    <div style="text-align: center; padding: 60px 20px;">
+        <svg width="64" height="64" fill="none" stroke="#cbd5e1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin: 0 auto 20px;">
+            <path d="M16 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/>
+            <circle cx="22" cy="7" r="4"/>
+            <path d="M2 21v-2a4 4 0 0 1 4-4h4"/>
+            <circle cx="8" cy="7" r="4"/>
+        </svg>
+        <h4 style="font-size: 18px; font-weight: 600; color: #64748b; margin-bottom: 8px;">No Users Found</h4>
+        <p style="color: #94a3b8; font-size: 14px; margin-bottom: 20px;">Get started by creating your first user.</p>
+        <a href="{% url 'adminpanel:add_user' %}" class="btn btn-primary">
+            Create User
+        </a>
+    </div>
+    {% endif %}
 
 </div>
 
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Initialize search for users table
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('userSearch');
+        if (searchInput) {
+            searchInput.addEventListener('input', function() {
+                filterTable('userSearch', 'usersTable');
+            });
+        }
+    });
+</script>
 {% endblock %}
