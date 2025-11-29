@@ -1,36 +1,351 @@
-{% extends 'adminpanel/base.html' %}
+{% extends "adminpanel/base.html" %}
+
+{% block title %}Add Admin{% endblock %}
+
+{% block header %}
+Create New Administrator
+{% endblock %}
 
 {% block content %}
-<div class="max-w-md mx-auto mt-10 p-6 bg-white/10 backdrop-blur-xl rounded-2xl shadow-lg border border-white/20">
-    <h2 class="text-2xl font-semibold text-white text-center mb-6">Add New Admin</h2>
 
-    {% if messages %}
-        {% for message in messages %}
-            <p class="text-center text-red-400 mb-3">{{ message }}</p>
-        {% endfor %}
-    {% endif %}
-
-    <form method="POST">
-        {% csrf_token %}
-        <label class="text-gray-200 text-sm">Username</label>
-        <input type="text" name="username" required
-            class="w-full px-4 py-3 rounded-lg bg-white/20 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 mt-1 mb-4"
-            placeholder="Enter username" />
-
-        <label class="text-gray-200 text-sm">Email</label>
-        <input type="email" name="email" required
-            class="w-full px-4 py-3 rounded-lg bg-white/20 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 mt-1 mb-4"
-            placeholder="admin@example.com" />
-
-        <label class="text-gray-200 text-sm">Password</label>
-        <input type="password" name="password" required
-            class="w-full px-4 py-3 rounded-lg bg-white/20 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 mt-1 mb-6"
-            placeholder="Enter password" />
-
-        <button type="submit"
-            class="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl font-medium shadow-lg">
-            Create Admin
-        </button>
-    </form>
+<!-- ================================
+     PAGE HEADER
+================================ -->
+<div style="margin-bottom: 32px;">
+    <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 8px;">
+        <a href="{% url 'adminpanel:dashboard' %}" style="width: 40px; height: 40px; background: white; border-radius: 10px; display: flex; align-items: center; justify-content: center; text-decoration: none; border: 2px solid #e2e8f0; transition: all 0.3s;"
+           onmouseover="this.style.background='#f8fafc'; this.style.borderColor='#8b5cf6'"
+           onmouseout="this.style.background='white'; this.style.borderColor='#e2e8f0'">
+            <i class="fa fa-arrow-left" style="font-size: 18px; color: #64748b;"></i>
+        </a>
+        <h2 style="font-size: 32px; font-weight: 700; color: #0d47a1; margin: 0; letter-spacing: -0.5px; display: flex; align-items: center; gap: 12px;">
+            <i class="fa fa-user-plus" style="font-size: 28px; color: currentColor;"></i>
+            Create New Administrator
+        </h2>
+    </div>
+    <p style="font-size: 16px; color: #64748b; margin: 0; padding-left: 56px;">
+        Grant administrative privileges to a new user
+    </p>
 </div>
+
+<!-- ================================
+     WARNING BANNER
+================================ -->
+<div style="max-width: 700px; margin: 0 auto 24px;">
+    <div class="glass" style="padding: 20px; background: linear-gradient(135deg, rgba(245, 158, 11, 0.08), rgba(251, 191, 36, 0.04)); border: 2px solid rgba(245, 158, 11, 0.3);">
+        <div style="display: flex; gap: 16px; align-items: start;">
+            <div style="flex-shrink: 0; width: 40px; height: 40px; background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(251, 191, 36, 0.1)); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                <i class="fa fa-exclamation-triangle" style="font-size: 20px; color: #f59e0b;"></i>
+            </div>
+            <div>
+                <h4 style="font-size: 15px; font-weight: 600; color: #92400e; margin: 0 0 6px;">Administrator Access Warning</h4>
+                <p style="font-size: 13px; color: #78350f; margin: 0; line-height: 1.6;">
+                    Administrators have full system access including user management, settings, and sensitive data. Only grant admin privileges to trusted individuals.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ================================
+     FORM CONTAINER
+================================ -->
+<div style="max-width: 700px; margin: 0 auto;">
+    <div class="glass" style="padding: 48px;">
+        
+        <!-- Form Icon Header -->
+        <div style="text-align: center; margin-bottom: 36px;">
+            <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #8b5cf6, #7c3aed); border-radius: 20px; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; box-shadow: 0 8px 24px rgba(139, 92, 246, 0.4);">
+                <i class="fa fa-user-shield" style="font-size: 40px; color: white;"></i>
+            </div>
+            <h3 style="font-size: 24px; font-weight: 700; color: #0d47a1; margin: 0 0 8px;">Administrator Details</h3>
+            <p style="color: #64748b; font-size: 14px; margin: 0;">Create a new admin account with full privileges</p>
+        </div>
+
+        <form method="POST" id="addAdminForm">
+            {% csrf_token %}
+
+            <!-- Username Field -->
+            <div style="margin-bottom: 24px;">
+                <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; font-size: 14px; font-weight: 600; color: #0d47a1;">
+                    <i class="fa fa-user" style="font-size: 16px;"></i>
+                    Admin Username
+                    <span style="color: #ef4444;">*</span>
+                </label>
+                <div style="position: relative;">
+                    <input type="text" 
+                           name="username" 
+                           id="username"
+                           required
+                           placeholder="Enter admin username"
+                           style="width: 100%; padding: 14px 18px 14px 46px; border-radius: 12px; border: 2px solid #e2e8f0; font-size: 15px; transition: all 0.3s;"
+                           onfocus="this.style.borderColor='#8b5cf6'; this.style.boxShadow='0 0 0 4px rgba(139, 92, 246, 0.1)'"
+                           onblur="this.style.borderColor='#e2e8f0'; this.style.boxShadow='none'">
+                    <i class="fa fa-user" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #94a3b8; pointer-events: none;"></i>
+                </div>
+                <p style="font-size: 12px; color: #64748b; margin: 6px 0 0 4px;">Choose a unique username for this administrator</p>
+            </div>
+
+            <!-- Email Field -->
+            <div style="margin-bottom: 24px;">
+                <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; font-size: 14px; font-weight: 600; color: #0d47a1;">
+                    <i class="fa fa-envelope" style="font-size: 16px;"></i>
+                    Email Address
+                    <span style="color: #ef4444;">*</span>
+                </label>
+                <div style="position: relative;">
+                    <input type="email" 
+                           name="email" 
+                           id="email"
+                           required
+                           placeholder="admin@example.com"
+                           style="width: 100%; padding: 14px 18px 14px 46px; border-radius: 12px; border: 2px solid #e2e8f0; font-size: 15px; transition: all 0.3s;"
+                           onfocus="this.style.borderColor='#8b5cf6'; this.style.boxShadow='0 0 0 4px rgba(139, 92, 246, 0.1)'"
+                           onblur="this.style.borderColor='#e2e8f0'; this.style.boxShadow='none'">
+                    <i class="fa fa-envelope" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #94a3b8; pointer-events: none;"></i>
+                </div>
+                <p style="font-size: 12px; color: #64748b; margin: 6px 0 0 4px;">Required for account recovery and notifications</p>
+            </div>
+
+            <!-- Password Field -->
+            <div style="margin-bottom: 28px;">
+                <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; font-size: 14px; font-weight: 600; color: #0d47a1;">
+                    <i class="fa fa-lock" style="font-size: 16px;"></i>
+                    Secure Password
+                    <span style="color: #ef4444;">*</span>
+                </label>
+                <div style="position: relative;">
+                    <input type="password" 
+                           name="password" 
+                           id="password"
+                           required
+                           placeholder="Enter secure password"
+                           style="width: 100%; padding: 14px 50px 14px 46px; border-radius: 12px; border: 2px solid #e2e8f0; font-size: 15px; transition: all 0.3s;"
+                           onfocus="this.style.borderColor='#8b5cf6'; this.style.boxShadow='0 0 0 4px rgba(139, 92, 246, 0.1)'"
+                           onblur="this.style.borderColor='#e2e8f0'; this.style.boxShadow='none'">
+                    <i class="fa fa-lock" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #94a3b8; pointer-events: none;"></i>
+                    <button type="button" 
+                            onclick="togglePassword()"
+                            style="position: absolute; right: 14px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; padding: 4px;">
+                        <i id="showPasswordIcon" class="fa fa-eye" style="color: #94a3b8;"></i>
+                        <i id="hidePasswordIcon" class="fa fa-eye-slash" style="color: #94a3b8; display: none;"></i>
+                    </button>
+                </div>
+                <div id="passwordStrength" style="margin-top: 8px; display: none;">
+                    <div style="display: flex; gap: 4px; margin-bottom: 6px;">
+                        <div id="strength1" style="height: 4px; flex: 1; background: #e2e8f0; border-radius: 2px; transition: all 0.3s;"></div>
+                        <div id="strength2" style="height: 4px; flex: 1; background: #e2e8f0; border-radius: 2px; transition: all 0.3s;"></div>
+                        <div id="strength3" style="height: 4px; flex: 1; background: #e2e8f0; border-radius: 2px; transition: all 0.3s;"></div>
+                        <div id="strength4" style="height: 4px; flex: 1; background: #e2e8f0; border-radius: 2px; transition: all 0.3s;"></div>
+                    </div>
+                    <p id="strengthText" style="font-size: 12px; margin: 0;"></p>
+                </div>
+                <p style="font-size: 12px; color: #64748b; margin: 6px 0 0 4px;">Use a strong password with at least 8 characters</p>
+            </div>
+
+            <!-- Divider -->
+            <div style="height: 1px; background: linear-gradient(90deg, transparent, #e2e8f0, transparent); margin: 32px 0;"></div>
+
+            <!-- Admin Privileges Info -->
+            <div style="margin-bottom: 32px;">
+                <div style="background: linear-gradient(135deg, rgba(139, 92, 246, 0.08), rgba(124, 58, 237, 0.04)); border: 2px solid rgba(139, 92, 246, 0.2); border-radius: 16px; padding: 24px;">
+                    <div style="display: flex; align-items: start; gap: 16px; margin-bottom: 16px;">
+                        <div style="flex-shrink: 0; width: 48px; height: 48px; background: linear-gradient(135deg, #8b5cf6, #7c3aed); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fa fa-shield-alt" style="font-size: 24px; color: white;"></i>
+                        </div>
+                        <div>
+                            <h4 style="font-size: 16px; font-weight: 600; color: #0d47a1; margin: 0 0 8px;">Administrator Privileges</h4>
+                            <p style="font-size: 13px; color: #64748b; margin: 0 0 12px; line-height: 1.6;">
+                                This account will have complete system access with the following permissions:
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <i class="fa fa-check-circle" style="color: #10b981;"></i>
+                            <span style="font-size: 13px; color: #64748b;">Full user management</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <i class="fa fa-check-circle" style="color: #10b981;"></i>
+                            <span style="font-size: 13px; color: #64748b;">System settings access</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <i class="fa fa-check-circle" style="color: #10b981;"></i>
+                            <span style="font-size: 13px; color: #64748b;">Create & delete users</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <i class="fa fa-check-circle" style="color: #10b981;"></i>
+                            <span style="font-size: 13px; color: #64748b;">All data access</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div style="display: flex; gap: 12px;">
+                <a href="{% url 'adminpanel:dashboard' %}" 
+                   class="btn btn-secondary" 
+                   style="flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 14px;">
+                    <i class="fa fa-times" style="font-size: 16px;"></i>
+                    Cancel
+                </a>
+                <button type="submit" 
+                        class="btn" 
+                        style="flex: 2; display: flex; align-items: center; justify-content: center; gap: 10px; padding: 14px; font-size: 16px; background: linear-gradient(135deg, #8b5cf6, #7c3aed); color: white; border-radius: 12px; box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);">
+                    <i class="fa fa-user-plus" style="font-size: 18px;"></i>
+                    Create Administrator
+                </button>
+            </div>
+        </form>
+
+    </div>
+
+    <!-- Security Tips Card -->
+    <div class="glass" style="margin-top: 24px; padding: 24px; background: linear-gradient(135deg, rgba(16, 185, 129, 0.05), rgba(5, 150, 105, 0.02)); border: 2px solid rgba(16, 185, 129, 0.1);">
+        <div style="display: flex; gap: 16px;">
+            <div style="flex-shrink: 0;">
+                <i class="fa fa-shield-check" style="font-size: 24px; color: #10b981;"></i>
+            </div>
+            <div>
+                <h4 style="font-size: 15px; font-weight: 600; color: #0d47a1; margin: 0 0 8px;">Security Best Practices</h4>
+                <ul style="margin: 0; padding-left: 20px; color: #64748b; font-size: 14px; line-height: 1.8;">
+                    <li>Use a unique password that hasn't been used elsewhere</li>
+                    <li>Include uppercase, lowercase, numbers, and special characters</li>
+                    <li>Enable two-factor authentication after account creation</li>
+                    <li>Regularly review and update admin access permissions</li>
+                    <li>Never share admin credentials with unauthorized users</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Toggle password visibility
+    function togglePassword() {
+        const passwordField = document.getElementById('password');
+        const showIcon = document.getElementById('showPasswordIcon');
+        const hideIcon = document.getElementById('hidePasswordIcon');
+        
+        if (passwordField.type === 'password') {
+            passwordField.type = 'text';
+            showIcon.style.display = 'none';
+            hideIcon.style.display = 'block';
+        } else {
+            passwordField.type = 'password';
+            showIcon.style.display = 'block';
+            hideIcon.style.display = 'none';
+        }
+    }
+
+    // Password strength indicator
+    const passwordField = document.getElementById('password');
+    const strengthIndicator = document.getElementById('passwordStrength');
+    const strengthText = document.getElementById('strengthText');
+    
+    passwordField.addEventListener('input', function() {
+        const password = this.value;
+        const strength = calculatePasswordStrength(password);
+        
+        if (password.length > 0) {
+            strengthIndicator.style.display = 'block';
+            updateStrengthIndicator(strength);
+        } else {
+            strengthIndicator.style.display = 'none';
+        }
+    });
+    
+    function calculatePasswordStrength(password) {
+        let strength = 0;
+        if (password.length >= 8) strength++;
+        if (password.match(/[a-z]/) && password.match(/[A-Z]/)) strength++;
+        if (password.match(/[0-9]/)) strength++;
+        if (password.match(/[^a-zA-Z0-9]/)) strength++;
+        return strength;
+    }
+    
+    function updateStrengthIndicator(strength) {
+        const bars = ['strength1', 'strength2', 'strength3', 'strength4'];
+        const colors = ['#ef4444', '#f59e0b', '#10b981', '#10b981'];
+        const texts = ['Weak', 'Fair', 'Good', 'Strong'];
+        const textColors = ['#ef4444', '#f59e0b', '#10b981', '#10b981'];
+        
+        bars.forEach((bar, index) => {
+            const element = document.getElementById(bar);
+            if (index < strength) {
+                element.style.background = colors[strength - 1];
+            } else {
+                element.style.background = '#e2e8f0';
+            }
+        });
+        
+        if (strength > 0) {
+            strengthText.textContent = `Password strength: ${texts[strength - 1]}`;
+            strengthText.style.color = textColors[strength - 1];
+        }
+    }
+
+    // Form validation
+    document.getElementById('addAdminForm').addEventListener('submit', function(e) {
+        const username = document.getElementById('username').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value;
+        
+        if (username.length < 3) {
+            e.preventDefault();
+            showNotification('Username must be at least 3 characters long', 'error');
+            return false;
+        }
+        
+        if (!isValidEmail(email)) {
+            e.preventDefault();
+            showNotification('Please enter a valid email address', 'error');
+            return false;
+        }
+        
+        if (password.length < 8) {
+            e.preventDefault();
+            showNotification('Password must be at least 8 characters long for admin accounts', 'error');
+            return false;
+        }
+        
+        const strength = calculatePasswordStrength(password);
+        if (strength < 2) {
+            e.preventDefault();
+            showNotification('Please use a stronger password for admin accounts', 'error');
+            return false;
+        }
+        
+        // Show loading spinner
+        showLoadingSpinner();
+    });
+    
+    function isValidEmail(email) {
+        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return regex.test(email);
+    }
+
+    // Add smooth validation feedback
+    document.querySelectorAll('input[required]').forEach(input => {
+        input.addEventListener('blur', function() {
+            if (this.value.trim() === '') {
+                this.style.borderColor = '#ef4444';
+            } else if (this.type === 'email' && !isValidEmail(this.value)) {
+                this.style.borderColor = '#ef4444';
+            } else {
+                this.style.borderColor = '#10b981';
+            }
+        });
+        
+        input.addEventListener('input', function() {
+            if (this.value.trim() !== '') {
+                this.style.borderColor = '#e2e8f0';
+            }
+        });
+    });
+</script>
 {% endblock %}

@@ -94,7 +94,7 @@ Dashboard Overview
                 Active Admins
             </h3>
             <p style="font-size: 36px; font-weight: 700; color: #0d47a1; margin: 0; line-height: 1;">
-                {{ admin_count }}
+                {{ total_admins }}
             </p>
             
             <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid #e2e8f0;">
@@ -130,7 +130,7 @@ Dashboard Overview
                 Normal Users
             </h3>
             <p style="font-size: 36px; font-weight: 700; color: #0d47a1; margin: 0; line-height: 1;">
-                {{ normal_users }}
+                {{ regular_count }}
             </p>
             
             <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid #e2e8f0;">
@@ -245,16 +245,57 @@ Dashboard Overview
             Recent Users
         </h3>
         
-        <div style="display: flex; gap: 12px;">
-            <input type="search" id="userSearch" placeholder="Search users..." style="width: 260px; padding: 10px 16px; border-radius: 10px; border: 2px solid #e2e8f0; font-size: 14px;" data-table-id="usersTable">
-            <a href="{% url 'adminpanel:user_list' %}" class="btn btn-primary" style="white-space: nowrap; display: flex; align-items: center; gap: 8px;">
-                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="5" y1="12" x2="19" y2="12"/>
-                    <polyline points="12 5 19 12 12 19"/>
-                </svg>
-                View All
-            </a>
-        </div>
+            <div style="display: flex; gap: 14px; align-items: center;">
+
+                <!-- Search Input -->
+                <div style="position: relative;">
+                    <i class="fa-solid fa-magnifying-glass" 
+                    style="
+                        position: absolute;
+                        top: 50%; 
+                        left: 12px;
+                        transform: translateY(-50%);
+                        font-size: 14px;
+                        color: #64748b;
+                    ">
+                    </i>
+
+                    <input type="search" id="userSearch" placeholder="Search users..." 
+                        style="
+                            width: 260px;
+                            padding: 10px 16px 10px 36px;
+                            border-radius: 10px;
+                            border: 2px solid #e2e8f0;
+                            font-size: 14px;
+                            transition: 0.25s ease;
+                        " 
+                        data-table-id="usersTable"
+                    >
+                </div>
+
+                <!-- View All Button -->
+                <a href="{% url 'adminpanel:user_list' %}" 
+                class="btn btn-primary"
+                style="
+                    white-space: nowrap; 
+                    display: flex; 
+                    align-items: center; 
+                    gap: 10px;
+                    padding: 10px 18px;
+                    border-radius: 10px;
+                ">
+                    
+                    <i class="fa-solid fa-arrow-right"
+                    style="
+                        font-size: 14px;
+                        transition: 0.25s ease;
+                    ">
+                    </i>
+
+                    View All
+                </a>
+            </div>
+
     </div>
 
     {% if recent_users %}
@@ -263,40 +304,29 @@ Dashboard Overview
             <thead>
                 <tr>
                     <th style="border-radius: 12px 0 0 0;">
-                        <div style="display: flex; align-items: center; gap: 8px;">
-                            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                                <circle cx="12" cy="7" r="4"/>
-                            </svg>
+                        <div class="th-icon">
+                            <i class="fa-solid fa-user"></i>
                             Username
                         </div>
                     </th>
+
                     <th>
-                        <div style="display: flex; align-items: center; gap: 8px;">
-                            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <rect x="2" y="4" width="20" height="16" rx="2"/>
-                                <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
-                            </svg>
+                        <div class="th-icon">
+                            <i class="fa-solid fa-envelope"></i>
                             Email
                         </div>
                     </th>
+
                     <th>
-                        <div style="display: flex; align-items: center; gap: 8px;">
-                            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-                                <path d="M2 17l10 5 10-5"/>
-                            </svg>
+                        <div class="th-icon">
+                            <i class="fa-solid fa-shield-halved"></i>
                             Role
                         </div>
                     </th>
+
                     <th style="border-radius: 0 12px 0 0;">
-                        <div style="display: flex; align-items: center; gap: 8px;">
-                            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-                                <line x1="16" y1="2" x2="16" y2="6"/>
-                                <line x1="8" y1="2" x2="8" y2="6"/>
-                                <line x1="3" y1="10" x2="21" y2="10"/>
-                            </svg>
+                        <div class="th-icon">
+                            <i class="fa-solid fa-calendar-day"></i>
                             Created At
                         </div>
                     </th>
@@ -308,42 +338,36 @@ Dashboard Overview
                 <tr>
                     <td>
                         <div style="display: flex; align-items: center; gap: 12px;">
-                            <div style="width: 36px; height: 36px; background: linear-gradient(135deg, #1e88e5, #0891b2); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 14px;">
+                            <div class="avatar-box">
                                 {{ user.username|slice:":1"|upper }}
                             </div>
-                            <span style="font-weight: 600; color: #0d47a1;">{{ user.username }}</span>
+                            <span class="text-primary">{{ user.username }}</span>
                         </div>
                     </td>
-                    <td style="color: #64748b; font-size: 14px;">{{ user.email }}</td>
+
+                    <td class="text-muted">{{ user.email }}</td>
+
                     <td>
                         {% if user.is_superuser %}
                             <span class="badge badge-admin">
-                                <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: inline; vertical-align: middle; margin-right: 4px;">
-                                    <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-                                    <path d="M2 17l10 5 10-5"/>
-                                </svg>
+                                <i class="fa-solid fa-crown badge-icon"></i>
                                 Admin
                             </span>
                         {% else %}
                             <span class="badge badge-user">
-                                <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: inline; vertical-align: middle; margin-right: 4px;">
-                                    <circle cx="12" cy="12" r="10"/>
-                                    <path d="M12 16v-4"/>
-                                    <path d="M12 8h.01"/>
-                                </svg>
+                                <i class="fa-solid fa-user badge-icon"></i>
                                 User
                             </span>
                         {% endif %}
                     </td>
-                    <td style="color: #64748b; font-size: 14px;">
-                        <div style="display: flex; align-items: center; gap: 6px;">
-                            <svg width="14" height="14" fill="none" stroke="#64748b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="12" cy="12" r="10"/>
-                                <polyline points="12 6 12 12 16 14"/>
-                            </svg>
+
+                    <td class="text-muted">
+                        <div class="date-cell">
+                            <i class="fa-solid fa-clock"></i>
                             {{ user.date_joined|date:"M d, Y" }}
                         </div>
                     </td>
+
                 </tr>
                 {% endfor %}
             </tbody>
@@ -352,25 +376,24 @@ Dashboard Overview
 
     {% else %}
     <div style="text-align: center; padding: 60px 20px;">
-        <svg width="64" height="64" fill="none" stroke="#cbd5e1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin: 0 auto 20px;">
-            <path d="M16 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/>
-            <circle cx="22" cy="7" r="4"/>
-            <path d="M2 21v-2a4 4 0 0 1 4-4h4"/>
-            <circle cx="8" cy="7" r="4"/>
-        </svg>
-        <h4 style="font-size: 18px; font-weight: 600; color: #64748b; margin-bottom: 8px;">No Users Found</h4>
-        <p style="color: #94a3b8; font-size: 14px; margin-bottom: 20px;">Get started by creating your first user.</p>
+        <i class="fa-solid fa-users-slash empty-icon"></i>
+
+        <h4 class="empty-title">No Users Found</h4>
+        <p class="empty-text">Get started by creating your first user.</p>
+
         <a href="{% url 'adminpanel:add_user' %}" class="btn btn-primary">
             Create User
         </a>
     </div>
     {% endif %}
 
+
 </div>
 
 {% endblock %}
 
 {% block extra_js %}
+
 <script>
     // Initialize search for users table
     document.addEventListener('DOMContentLoaded', function() {
@@ -382,4 +405,51 @@ Dashboard Overview
         }
     });
 </script>
+{% endblock %}
+
+{% block extra_css %}
+    <style>
+    .avatar-box {
+        width: 36px;
+        height: 36px;
+        background: linear-gradient(135deg, #1e88e5, #0891b2);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 700;
+        font-size: 14px;
+    }
+
+    .empty-icon {
+        font-size: 60px;
+        color: #cbd5e1;
+        margin-bottom: 20px;
+    }
+
+    .empty-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #64748b;
+    }
+
+    .empty-text {
+        color: #94a3b8;
+        font-size: 14px;
+    }
+
+    /*TEXT HELPERS*/
+
+    .text-muted {
+        color: #64748b;
+        font-size: 14px;
+    }
+
+    .text-primary {
+        font-weight: 600;
+        color: #0d47a1;
+    }
+
+</style>
 {% endblock %}

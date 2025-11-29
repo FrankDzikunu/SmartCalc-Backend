@@ -8,58 +8,255 @@ Create New User
 
 {% block content %}
 
-<div class="glass p-8 rounded-2xl shadow-xl max-w-xl mx-auto text-white">
-
-  <form method="POST">
-    {% csrf_token %}
-
-    <!-- Username -->
-    <div class="mb-6">
-      <label class="block mb-2 text-sm font-medium">Username</label>
-      <input type="text" name="username" required
-             class="w-full p-3 rounded-xl bg-white/10 border border-white/20 text-white
-                    focus:outline-none focus:ring-2 focus:ring-blue-400">
+<!-- ================================
+     PAGE HEADER
+================================ -->
+<div style="margin-bottom: 32px;">
+    <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 8px;">
+        <a href="{% url 'adminpanel:user_list' %}" style="width: 40px; height: 40px; background: white; border-radius: 10px; display: flex; align-items: center; justify-content: center; text-decoration: none; border: 2px solid #e2e8f0; transition: all 0.3s;"
+           onmouseover="this.style.background='#f8fafc'; this.style.borderColor='#1e88e5'"
+           onmouseout="this.style.background='white'; this.style.borderColor='#e2e8f0'">
+            <i class="fa-solid fa-arrow-left" style="font-size: 18px; color:#64748b;"></i>
+        </a>
+        <h2 style="font-size: 32px; font-weight: 700; color: #0d47a1; margin: 0; letter-spacing: -0.5px; display: flex; align-items: center; gap: 12px;">
+            <i class="fa-solid fa-user-plus" style="font-size: 28px;"></i>
+            Create New User
+        </h2>
     </div>
-
-    <!-- Email -->
-    <div class="mb-6">
-      <label class="block mb-2 text-sm font-medium">Email</label>
-      <input type="email" name="email"
-             class="w-full p-3 rounded-xl bg-white/10 border border-white/20 text-white
-                    focus:outline-none focus:ring-2 focus:ring-blue-400">
-    </div>
-
-    <!-- Password -->
-    <div class="mb-6">
-      <label class="block mb-2 text-sm font-medium">Password</label>
-      <input type="password" name="password" required
-             class="w-full p-3 rounded-xl bg-white/10 border border-white/20 text-white
-                    focus:outline-none focus:ring-2 focus:ring-blue-400">
-    </div>
-
-    <!-- Admin Toggle -->
-    <div class="flex items-center mb-8 space-x-4">
-      <label class="text-sm font-medium">Make this user an admin?</label>
-
-      <label class="inline-flex items-center cursor-pointer">
-        <input type="checkbox" name="is_admin" class="sr-only peer">
-        <div class="w-11 h-6 bg-gray-600 rounded-full peer peer-checked:bg-purple-600
-                    transition-all relative">
-          <div class="absolute top-1 left-1 w-4 h-4 bg-white rounded-full
-                      peer-checked:translate-x-5 transition-all"></div>
-        </div>
-      </label>
-    </div>
-
-    <!-- Submit Button -->
-    <button type="submit"
-            class="w-full py-3 bg-green-600 hover:bg-green-700 rounded-xl text-white
-                   text-lg shadow-lg transition">
-      Create User
-    </button>
-
-  </form>
-
+    <p style="font-size: 16px; color: #64748b; margin: 0; padding-left: 56px;">
+        Add a new user to the system with custom permissions
+    </p>
 </div>
 
+<!-- ================================
+     FORM CONTAINER
+================================ -->
+<div style="max-width: 700px; margin: 0 auto;">
+    <div class="glass" style="padding: 48px;">
+        
+        <!-- Form Icon Header -->
+        <div style="text-align: center; margin-bottom: 36px;">
+            <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #1e88e5, #0891b2); border-radius: 20px; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; box-shadow: 0 8px 24px rgba(30, 136, 229, 0.3);">
+                <i class="fa-solid fa-user-plus" style="font-size: 40px; color:white;"></i>
+            </div>
+            <h3 style="font-size: 24px; font-weight: 700; color: #0d47a1; margin: 0 0 8px;">User Information</h3>
+            <p style="color: #64748b; font-size: 14px; margin: 0;">Fill in the details to create a new user account</p>
+        </div>
+
+        <form method="POST" id="addUserForm">
+            {% csrf_token %}
+
+            <!-- Username Field -->
+            <div style="margin-bottom: 24px;">
+                <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; font-size: 14px; font-weight: 600; color: #0d47a1;">
+                    <i class="fa-solid fa-user" style="font-size: 16px;"></i>
+                    Username
+                    <span style="color: #ef4444;">*</span>
+                </label>
+                <div style="position: relative;">
+                    <input type="text" 
+                           name="username" 
+                           id="username"
+                           required
+                           placeholder="Enter username"
+                           style="width: 100%; padding: 14px 18px 14px 46px; border-radius: 12px; border: 2px solid #e2e8f0; font-size: 15px; transition: all 0.3s;"
+                           onfocus="this.style.borderColor='#1e88e5'; this.style.boxShadow='0 0 0 4px rgba(30, 136, 229, 0.1)'"
+                           onblur="this.style.borderColor='#e2e8f0'; this.style.boxShadow='none'">
+                    <i class="fa-solid fa-user" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color:#94a3b8; font-size: 18px;"></i>
+                </div>
+                <p style="font-size: 12px; color: #64748b; margin: 6px 0 0 4px;">Choose a unique username for this user</p>
+            </div>
+
+            <!-- Email Field -->
+            <div style="margin-bottom: 24px;">
+                <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; font-size: 14px; font-weight: 600; color: #0d47a1;">
+                    <i class="fa-solid fa-envelope" style="font-size: 16px;"></i>
+                    Email Address
+                </label>
+                <div style="position: relative;">
+                    <input type="email" 
+                           name="email" 
+                           id="email"
+                           placeholder="Enter email address"
+                           style="width: 100%; padding: 14px 18px 14px 46px; border-radius: 12px; border: 2px solid #e2e8f0; font-size: 15px; transition: all 0.3s;"
+                           onfocus="this.style.borderColor='#1e88e5'; this.style.boxShadow='0 0 0 4px rgba(30, 136, 229, 0.1)'"
+                           onblur="this.style.borderColor='#e2e8f0'; this.style.boxShadow='none'">
+                    <i class="fa-solid fa-envelope" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color:#94a3b8; font-size: 18px;"></i>
+                </div>
+                <p style="font-size: 12px; color: #64748b; margin: 6px 0 0 4px;">Optional: User's email for notifications</p>
+            </div>
+
+            <!-- Password Field -->
+            <div style="margin-bottom: 28px;">
+                <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; font-size: 14px; font-weight: 600; color: #0d47a1;">
+                    <i class="fa-solid fa-lock" style="font-size: 16px;"></i>
+                    Password
+                    <span style="color: #ef4444;">*</span>
+                </label>
+                <div style="position: relative;">
+                    <input type="password" 
+                           name="password" 
+                           id="password"
+                           required
+                           placeholder="Enter secure password"
+                           style="width: 100%; padding: 14px 50px 14px 46px; border-radius: 12px; border: 2px solid #e2e8f0; font-size: 15px; transition: all 0.3s;"
+                           onfocus="this.style.borderColor='#1e88e5'; this.style.boxShadow='0 0 0 4px rgba(30, 136, 229, 0.1)'"
+                           onblur="this.style.borderColor='#e2e8f0'; this.style.boxShadow='none'">
+
+                    <i class="fa-solid fa-lock" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color:#94a3b8; font-size: 18px;"></i>
+
+                    <button type="button" 
+                            onclick="togglePassword()"
+                            style="position: absolute; right: 14px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; padding: 4px;">
+                        <i id="showPasswordIcon" class="fa-solid fa-eye" style="font-size: 18px; color:#94a3b8;"></i>
+                        <i id="hidePasswordIcon" class="fa-solid fa-eye-slash" style="font-size: 18px; color:#94a3b8; display:none;"></i>
+                    </button>
+                </div>
+                <p style="font-size: 12px; color: #64748b; margin: 6px 0 0 4px;">Minimum 6 characters recommended</p>
+            </div>
+
+            <!-- Divider -->
+            <div style="height: 1px; background: linear-gradient(90deg, transparent, #e2e8f0, transparent); margin: 32px 0;"></div>
+
+            <!-- Admin Toggle -->
+            <div style="margin-bottom: 32px;">
+                <div style="background: linear-gradient(135deg, rgba(139, 92, 246, 0.05), rgba(124, 58, 237, 0.02)); border: 2px solid rgba(139, 92, 246, 0.2); border-radius: 16px; padding: 24px;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; gap: 20px;">
+                        <div style="flex: 1;">
+                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                                <i class="fa-solid fa-layer-group" style="font-size:20px; color:#8b5cf6;"></i>
+                                <h4 style="font-size: 16px; font-weight: 600; color: #0d47a1; margin: 0;">Administrator Privileges</h4>
+                            </div>
+                            <p style="font-size: 13px; color: #64748b; margin: 0; line-height: 1.5;">
+                                Grant this user full administrative access to the system
+                            </p>
+                        </div>
+                        
+                        <!-- Toggle Switch -->
+                        <label style="position: relative; display: inline-block; width: 56px; height: 30px; cursor: pointer;">
+                            <input type="checkbox" name="is_admin" id="adminToggle" style="opacity: 0; width: 0; height: 0;">
+                            <span style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background: #cbd5e1; border-radius: 30px; transition: 0.4s; box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);"
+                                  id="toggleSlider"></span>
+                            <span style="position: absolute; content: ''; height: 22px; width: 22px; left: 4px; bottom: 4px; background: white; border-radius: 50%; transition: 0.4s; box-shadow: 0 2px 4px rgba(0,0,0,0.2);"
+                                  id="toggleButton"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div style="display: flex; gap: 12px;">
+                <a href="{% url 'adminpanel:user_list' %}" 
+                   class="btn btn-secondary" 
+                   style="flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 14px;">
+                    <i class="fa-solid fa-xmark" style="font-size: 16px;"></i>
+                    Cancel
+                </a>
+                <button type="submit" 
+                        class="btn btn-primary" 
+                        style="flex: 2; display: flex; align-items: center; justify-content: center; gap: 10px; padding: 14px; font-size: 16px;">
+                    <i class="fa-solid fa-circle-check" style="font-size: 18px;"></i>
+                    Create User
+                </button>
+            </div>
+        </form>
+
+    </div>
+
+    <!-- Helper Card -->
+    <div class="glass" style="margin-top: 24px; padding: 24px; background: linear-gradient(135deg, rgba(30, 136, 229, 0.05), rgba(8, 145, 178, 0.02)); border: 2px solid rgba(30, 136, 229, 0.1);">
+        <div style="display: flex; gap: 16px;">
+            <div style="flex-shrink: 0;">
+                <i class="fa-solid fa-circle-info" style="font-size: 24px; color:#1e88e5;"></i>
+            </div>
+            <div>
+                <h4 style="font-size: 15px; font-weight: 600; color: #0d47a1; margin: 0 0 8px;">User Creation Tips</h4>
+                <ul style="margin: 0; padding-left: 20px; color: #64748b; font-size: 14px; line-height: 1.8;">
+                    <li>Username should be unique and easy to remember</li>
+                    <li>Use a strong password with at least 6 characters</li>
+                    <li>Admin users have full access to all system features</li>
+                    <li>Regular users have limited access based on permissions</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+
+{% block extra_js %}
+<script>
+    // Toggle password visibility
+    function togglePassword() {
+        const passwordField = document.getElementById('password');
+        const showIcon = document.getElementById('showPasswordIcon');
+        const hideIcon = document.getElementById('hidePasswordIcon');
+        
+        if (passwordField.type === 'password') {
+            passwordField.type = 'text';
+            showIcon.style.display = 'none';
+            hideIcon.style.display = 'block';
+        } else {
+            passwordField.type = 'password';
+            showIcon.style.display = 'block';
+            hideIcon.style.display = 'none';
+        }
+    }
+
+    // Toggle switch functionality
+    const adminToggle = document.getElementById('adminToggle');
+    const toggleSlider = document.getElementById('toggleSlider');
+    const toggleButton = document.getElementById('toggleButton');
+    
+    if (adminToggle) {
+        adminToggle.addEventListener('change', function() {
+            if (this.checked) {
+                toggleSlider.style.background = 'linear-gradient(135deg, #8b5cf6, #7c3aed)';
+                toggleButton.style.transform = 'translateX(26px)';
+            } else {
+                toggleSlider.style.background = '#cbd5e1';
+                toggleButton.style.transform = 'translateX(0)';
+            }
+        });
+    }
+
+    // Form validation
+    document.getElementById('addUserForm').addEventListener('submit', function(e) {
+        const username = document.getElementById('username').value.trim();
+        const password = document.getElementById('password').value;
+        
+        if (username.length < 3) {
+            e.preventDefault();
+            showNotification('Username must be at least 3 characters long', 'error');
+            return false;
+        }
+        
+        if (password.length < 6) {
+            e.preventDefault();
+            showNotification('Password must be at least 6 characters long', 'error');
+            return false;
+        }
+        
+        // Show loading spinner
+        showLoadingSpinner();
+    });
+
+    // Add smooth validation feedback
+    document.querySelectorAll('input[required]').forEach(input => {
+        input.addEventListener('blur', function() {
+            if (this.value.trim() === '') {
+                this.style.borderColor = '#ef4444';
+            } else {
+                this.style.borderColor = '#10b981';
+            }
+        });
+        
+        input.addEventListener('input', function() {
+            if (this.value.trim() !== '') {
+                this.style.borderColor = '#e2e8f0';
+            }
+        });
+    });
+</script>
 {% endblock %}

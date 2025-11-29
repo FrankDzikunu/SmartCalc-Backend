@@ -1,7 +1,3 @@
-/* ================================
-   ADMIN PANEL - ENHANCED JAVASCRIPT
-   Professional Interactions & Animations
-================================ */
 
 /* === INITIALIZATION === */
 document.addEventListener("DOMContentLoaded", () => {
@@ -180,9 +176,7 @@ function showNoResultsMessage(table, count, searchTerm) {
             const message = document.createElement("div");
             message.className = "no-results-message text-center p-6 text-gray-500";
             message.innerHTML = `
-                <svg class="mx-auto h-12 w-12 text-gray-400 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                </svg>
+                <i class="fas fa-search-minus mx-auto text-gray-400 mb-3 text-4xl"></i>
                 <p class="font-semibold">No results found</p>
                 <p class="text-sm">Try adjusting your search term</p>
             `;

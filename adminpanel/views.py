@@ -45,14 +45,17 @@ def admin_logout(request):
 # --- Dashboard ---
 @admin_required
 def dashboard(request):
+    users = User.objects.order_by('-date_joined')
     total_users = User.objects.count()
     total_admins = User.objects.filter(is_superuser=True).count()
+    regular_count = users.filter(is_superuser=False).count()
     recent_users = User.objects.order_by('-date_joined')[:5]
 
     context = {
         "total_users": total_users,
         "total_admins": total_admins,
         "recent_users": recent_users,
+        "regular_count": regular_count,
     }
     return render(request, 'adminpanel/dashboard.html', context)
 
@@ -60,7 +63,14 @@ def dashboard(request):
 @admin_required
 def user_list(request):
     users = User.objects.order_by('-date_joined')
-    return render(request, 'adminpanel/user_list.html', {'users': users})
+    admin_count = users.filter(is_superuser=True).count()
+    regular_count = users.filter(is_superuser=False).count()
+    return render(request, "adminpanel/user_list.html", {
+        "users": users,
+        "admin_count": admin_count,
+        "regular_count": regular_count,
+    }) 
+
 
 # --- Add Regular User ---
 @admin_required
@@ -114,6 +124,17 @@ def add_admin(request):
 @admin_required
 def delete_user(request, user_id):
     user = get_object_or_404(User, id=user_id)
+    current_user = request.user
+
+    # Prevent deleting superuser
+    if user.is_superuser:
+        messages.error(request, "You cannot delete a superuser!")
+        return redirect('adminpanel:user_list')
+
+    # Prevent admin from deleting other admins
+    if user.is_staff and not current_user.is_superuser:
+        messages.error(request, "Only a superuser can delete other admins!")
+        return redirect('adminpanel:user_list')
 
     if request.method == 'POST':
         username = user.username

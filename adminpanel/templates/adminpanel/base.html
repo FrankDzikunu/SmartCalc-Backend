@@ -14,69 +14,36 @@
     
     <!-- Stylesheets -->
     <link rel="stylesheet" href="{% static 'adminpanel/css/styles.css' %}">
-    
-    <!-- Additional Page Styles -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
     {% block extra_css %}{% endblock %}
 </head>
 <body>
 
-    <!-- ================================
-         NAVIGATION BAR
-    ================================ -->
+    <!-- NAVIGATION BAR -->
     <nav>
         <div style="display: flex; align-items: center; gap: 20px;">
-            <!-- Logo/Brand -->
             <div style="display: flex; align-items: center; gap: 12px;">
-                <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect width="32" height="32" rx="8" fill="url(#gradient)"/>
-                    <path d="M16 8L20 12H12L16 8Z" fill="white"/>
-                    <rect x="12" y="14" width="8" height="10" rx="2" fill="white"/>
-                    <defs>
-                        <linearGradient id="gradient" x1="0" y1="0" x2="32" y2="32">
-                            <stop offset="0%" stop-color="#1e88e5"/>
-                            <stop offset="100%" stop-color="#0891b2"/>
-                        </linearGradient>
-                    </defs>
-                </svg>
+                <i class="fa-solid fa-gem" style="font-size: 32px; color:#1e88e5;"></i>
                 <h1>{% block header %}Admin Panel{% endblock %}</h1>
             </div>
         </div>
         
-        <!-- Right Side Nav Items -->
         <div style="display: flex; align-items: center; gap: 20px;">
-            <!-- Welcome Message -->
             <span style="color: #64748b; font-size: 14px; font-weight: 500;">
                 Welcome, <strong style="color: #0d47a1;">{{ request.user.username }}</strong>
             </span>
-            
-            <!-- Notification Bell (Optional) -->
-            <button class="icon-btn" data-tooltip="Notifications" style="background: none; border: none; cursor: pointer; padding: 8px; border-radius: 8px; transition: all 0.3s;">
-                <svg width="20" height="20" fill="none" stroke="#64748b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
-                    <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
-                </svg>
-            </button>
-            
-            <!-- Logout Button -->
+
             <a href="{% url 'adminpanel:admin_logout' %}" class="btn btn-danger" style="display: flex; align-items: center; gap: 8px;">
-                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-                    <polyline points="16 17 21 12 16 7"/>
-                    <line x1="21" y1="12" x2="9" y2="12"/>
-                </svg>
+                <i class="fa-solid fa-right-from-bracket"></i>
                 Logout
             </a>
         </div>
     </nav>
 
-    <!-- ================================
-         MAIN LAYOUT WRAPPER
-    ================================ -->
     <div style="display: flex; gap: 24px; margin-top: 90px; padding: 0 40px 40px;">
         
-        <!-- ================================
-             SIDEBAR NAVIGATION
-        ================================ -->
+        <!-- SIDEBAR -->
         <aside style="width: 260px; flex-shrink: 0;">
             <div class="glass" style="position: sticky; top: 90px;">
                 <h3 style="font-size: 14px; font-weight: 600; color: #64748b; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 20px;">
@@ -84,15 +51,11 @@
                 </h3>
                 
                 <ul style="list-style: none; padding: 0; margin: 0;">
+                    
                     <!-- Dashboard -->
                     <li>
                         <a href="{% url 'adminpanel:dashboard' %}" class="sidebar-link" data-page="dashboard">
-                            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <rect x="3" y="3" width="7" height="7"/>
-                                <rect x="14" y="3" width="7" height="7"/>
-                                <rect x="14" y="14" width="7" height="7"/>
-                                <rect x="3" y="14" width="7" height="7"/>
-                            </svg>
+                            <i class="fa-solid fa-table-cells"></i>
                             <span>Dashboard</span>
                         </a>
                     </li>
@@ -100,12 +63,7 @@
                     <!-- Users List -->
                     <li>
                         <a href="{% url 'adminpanel:user_list' %}" class="sidebar-link" data-page="users">
-                            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-                                <circle cx="9" cy="7" r="4"/>
-                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
-                                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-                            </svg>
+                            <i class="fa-solid fa-users"></i>
                             <span>Users</span>
                         </a>
                     </li>
@@ -113,12 +71,7 @@
                     <!-- Add User -->
                     <li>
                         <a href="{% url 'adminpanel:add_user' %}" class="sidebar-link" data-page="add-user">
-                            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-                                <circle cx="8.5" cy="7" r="4"/>
-                                <line x1="20" y1="8" x2="20" y2="14"/>
-                                <line x1="23" y1="11" x2="17" y2="11"/>
-                            </svg>
+                            <i class="fa-solid fa-user-plus"></i>
                             <span>Add User</span>
                         </a>
                     </li>
@@ -126,27 +79,18 @@
                     <!-- Add Admin -->
                     <li>
                         <a href="{% url 'adminpanel:add_admin' %}" class="sidebar-link" data-page="add-admin">
-                            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-                                <path d="M2 17l10 5 10-5"/>
-                                <path d="M2 12l10 5 10-5"/>
-                            </svg>
+                            <i class="fa-solid fa-shield-halved"></i>
                             <span>Add Admin</span>
                         </a>
                     </li>
                 </ul>
-                
-                <!-- Divider -->
+
                 <div style="height: 1px; background: linear-gradient(90deg, transparent, #e2e8f0, transparent); margin: 20px 0;"></div>
-                
+
                 <!-- System Info -->
                 <div style="padding: 12px; background: linear-gradient(135deg, rgba(30, 136, 229, 0.05), rgba(8, 145, 178, 0.05)); border-radius: 12px; border: 1px solid rgba(30, 136, 229, 0.1);">
                     <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
-                        <svg width="16" height="16" fill="none" stroke="#1e88e5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="12" cy="12" r="10"/>
-                            <line x1="12" y1="16" x2="12" y2="12"/>
-                            <line x1="12" y1="8" x2="12.01" y2="8"/>
-                        </svg>
+                        <i class="fa-solid fa-circle-info" style="color:#1e88e5;"></i>
                         <span style="font-size: 13px; font-weight: 600; color: #1e88e5;">System Status</span>
                     </div>
                     <p style="font-size: 12px; color: #64748b; margin: 0;">All systems operational</p>
@@ -154,72 +98,53 @@
             </div>
         </aside>
 
-        <!-- ================================
-             MAIN CONTENT AREA
-        ================================ -->
+        <!-- MAIN CONTENT -->
         <main style="flex: 1; min-width: 0;">
             
-            <!-- Success/Error Messages -->
             {% if messages %}
             <div style="margin-bottom: 24px;">
                 {% for message in messages %}
                 <div class="message {% if message.tags == 'error' %}message-error{% elif message.tags == 'success' %}message-success{% else %}message-info{% endif %}" style="animation: slideIn 0.4s ease-out;">
-                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        {% if message.tags == 'error' %}
-                        <circle cx="12" cy="12" r="10"/>
-                        <line x1="15" y1="9" x2="9" y2="15"/>
-                        <line x1="9" y1="9" x2="15" y2="15"/>
-                        {% elif message.tags == 'success' %}
-                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
-                        <polyline points="22 4 12 14.01 9 11.01"/>
-                        {% else %}
-                        <circle cx="12" cy="12" r="10"/>
-                        <line x1="12" y1="16" x2="12" y2="12"/>
-                        <line x1="12" y1="8" x2="12.01" y2="8"/>
-                        {% endif %}
-                    </svg>
+                    
+                    {% if message.tags == 'error' %}
+                        <i class="fa-solid fa-circle-xmark"></i>
+                    {% elif message.tags == 'success' %}
+                        <i class="fa-solid fa-circle-check"></i>
+                    {% else %}
+                        <i class="fa-solid fa-circle-info"></i>
+                    {% endif %}
+
                     <span>{{ message }}</span>
                 </div>
                 {% endfor %}
             </div>
             {% endif %}
 
-            <!-- Page Content -->
             <div class="content-wrapper">
                 {% block content %}{% endblock %}
             </div>
         </main>
     </div>
 
-    <!-- ================================
-         FOOTER
-    ================================ -->
+    <!-- FOOTER -->
     <footer style="text-align: center; padding: 30px 40px; color: #64748b; font-size: 14px;">
         <div style="max-width: 1200px; margin: 0 auto;">
             <p style="margin: 0;">
                 &copy; {% now "Y" %} Admin Panel. All rights reserved. | 
-                <a href="#" style="color: #1e88e5; text-decoration: none; font-weight: 500;">Privacy Policy</a> | 
-                <a href="#" style="color: #1e88e5; text-decoration: none; font-weight: 500;">Terms of Service</a>
+                <a href="#" style="color: #1e88e5; text-decoration: none; font-weight: 500;">Privacy Policy</a> 
             </p>
             <p style="margin: 8px 0 0; font-size: 12px;">
                 Made with 
-                <svg width="12" height="12" fill="#ef4444" viewBox="0 0 24 24" style="display: inline; vertical-align: middle;">
-                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                </svg>
-                by Your Team
+                <i class="fa-solid fa-heart" style="color:#ef4444;"></i>
+                by Frank Dzikunu
             </p>
         </div>
     </footer>
 
-    <!-- ================================
-         SCRIPTS
-    ================================ -->
     <script src="{% static 'adminpanel/js/script.js' %}"></script>
-    
-    <!-- Additional Page Scripts -->
     {% block extra_js %}{% endblock %}
 
-    <!-- Inline Styles for Sidebar Links -->
+ <!-- Inline Styles for Sidebar Links -->
     <style>
         .sidebar-link {
             display: flex;
@@ -236,7 +161,7 @@
             margin-bottom: 6px;
         }
 
-        .sidebar-link svg {
+        .sidebar-link i {
             flex-shrink: 0;
             transition: all 0.3s;
         }
@@ -268,7 +193,7 @@
             height: 60%;
         }
 
-        .sidebar-link:hover svg {
+        .sidebar-link:hover i {
             stroke: #1e88e5;
             transform: scale(1.1);
         }
@@ -279,7 +204,7 @@
             box-shadow: 0 4px 12px rgba(30, 136, 229, 0.3);
         }
 
-        .sidebar-link.active svg {
+        .sidebar-link.active i {
             stroke: white;
         }
 
@@ -291,7 +216,7 @@
             background: rgba(30, 136, 229, 0.1);
         }
 
-        .icon-btn:hover svg {
+        .icon-btn:hover i {
             stroke: #1e88e5;
         }
 
@@ -362,6 +287,8 @@
                 font-size: 12px !important;
             }
         }
+
+        
     </style>
 
 </body>
