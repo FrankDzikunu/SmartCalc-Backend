@@ -1,7 +1,3 @@
-/* ================================
-   ADMIN PANEL - ENHANCED STYLES
-   Dominant Colors: Sea Blue & White
-================================ */
 
 /* === IMPORTS === */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
@@ -50,9 +46,21 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
+body, html {
+    margin: 0;
+    padding: 0;
+}
+
+main, .content {
+    margin-top: 0;
+    padding-top: 0;
+}
+
+
 /* === NAVBAR === */
 nav {
-    position: fixed;
+    position: relative;
+    margin: 0 0 0 0;
     top: 0;
     left: 0;
     right: 0;
@@ -60,6 +68,7 @@ nav {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    padding-top: 50px;
     padding: 0 40px;
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(20px);

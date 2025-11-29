@@ -14,22 +14,20 @@ Dashboard Overview
 <div style="margin-bottom: 32px;">
     <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
         <div>
-            <h2 style="font-size: 32px; font-weight: 700; color: #0d47a1; margin-bottom: 8px; letter-spacing: -0.5px;">
-                Welcome back, {{ request.user.username }}! 👋
+            <h2 style="font-size: 32px; font-weight: 700; color: #ffffff; margin-bottom: 8px; letter-spacing: -0.5px;">
+                Welcome back, {{ request.user.username }}!
             </h2>
-            <p style="font-size: 16px; color: #64748b; margin: 0;">
+            <p style="font-size: 16px; color: #ffffff; margin: 0;">
                 Here's what's happening with your system today.
             </p>
         </div>
         <div style="display: flex; gap: 12px;">
             <button class="btn btn-secondary" onclick="window.location.reload()" style="display: flex; align-items: center; gap: 8px;">
-                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points="23 4 23 10 17 10"/>
-                    <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
-                </svg>
+                <i class="fas fa-sync-alt" style="font-size: 16px;"></i>
                 Refresh
             </button>
         </div>
+
     </div>
 </div>
 
@@ -173,7 +171,7 @@ Dashboard Overview
      QUICK ACTIONS
 ================================ -->
 <div style="margin-bottom: 40px;">
-    <h3 style="font-size: 20px; font-weight: 700; color: #0d47a1; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+    <h3 style="font-size: 20px; font-weight: 700; color: #ffffff; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
         <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="9 11 12 14 22 4"/>
             <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
