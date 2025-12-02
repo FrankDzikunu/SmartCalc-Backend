@@ -38,13 +38,16 @@ function highlightActiveNavLink() {
 function openModal(id) {
     const modal = document.getElementById(id);
     if (!modal) return;
-    
+    // Scroll to the middle of the page
+    window.scrollTo({
+        top: document.documentElement.scrollHeight / 2 - window.innerHeight / 2,
+        behavior: 'smooth'
+    });
+
     modal.classList.remove("hidden");
     modal.classList.add("flex");
-    
     // Add fade-in animation
     modal.style.animation = "fadeIn 0.3s ease-out";
-    
     // Prevent body scroll when modal is open
     document.body.style.overflow = "hidden";
 }

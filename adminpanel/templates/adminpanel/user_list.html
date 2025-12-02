@@ -8,30 +8,7 @@ Manage Users
 
 
 {% block content %}
-<!-- ================================
-     MESSAGES ALERTS
-================================ -->
-  {% if messages %}
-  <div style="margin-bottom: 24px;">
-      {% for message in messages %}
-      <div 
-          class="alert {{ message.tags }}" >
-          {% if message.tags == 'error' %}
-              <i class="fa fa-exclamation-circle"></i>
-          {% elif message.tags == 'success' %}
-              <i class="fa fa-check-circle"></i>
-          {% else %}
-              <i class="fa fa-info-circle"></i>
-          {% endif %}
-          <span>{{ message }}</span>
-          <button onclick="this.parentElement.style.display='none';" 
-                  style="margin-left:auto; background: transparent; border: none; color: white; font-size: 18px; cursor: pointer;">
-              &times;
-          </button>
-      </div>
-      {% endfor %}
-  </div>
-  {% endif %}
+
 
 <!-- ================================
      PAGE HEADER WITH ACTIONS
@@ -253,13 +230,11 @@ Manage Users
 
                     <!-- Actions -->
                     <td style="text-align: center;">
-                        <button onclick="openDeleteModal('{{ user.id }}', '{{ user.username }}')" 
-                                class="btn btn-danger" 
-                                style="padding: 8px 18px; font-size: 14px; display: inline-flex; align-items: center; gap: 8px;"
-                                data-tooltip="Delete {{ user.username }}">
-                            <i class="fa fa-trash"></i>
-                            Delete
-                        </button>
+                    <button onclick="openDeleteModal('{{ user.id }}', '{{ user.username }}')" 
+                            class="btn btn-danger" 
+                            style="padding: 8px 18px; font-size: 14px; display: flex; align-items: center; gap: 8px;" >
+                    <i class="fa fa-trash"></i> Delete
+                    </button>
                     </td>
                 </tr>
                 {% endfor %}
@@ -289,8 +264,8 @@ Manage Users
 <!-- ================================
      DELETE CONFIRMATION MODAL
 ================================ -->
-<div id="deleteModal" class="modal hidden fixed inset-0 bg-black/60 z-50" style="backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; justify-self: center; align-self: center; position: absolute; top: 0; left: 0; width: 100%; height: 100%;">
-    <div class="glass" style="max-width: 500px; width: 90%; padding: 40px; position: relative; animation: fadeIn 0.3s ease-out;">
+<div id="deleteModal" class="modal hidden fixed inset-0 bg-black/60 z-50" style="backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; justify-self: center; align-self: center; position: fixed; top: 0; left: 0; width: 100%; height: 100%;">
+    <div class="glass" style="max-width: 500px; width: 90%; padding: 40px; position: relative; animation: fadeIn 0.3s ease-out; justify-self: center;">
         
         <!-- Close Button -->
         <button onclick="closeDeleteModal()" 
@@ -347,20 +322,24 @@ Manage Users
         const modal = document.getElementById('deleteModal');
         const deleteForm = document.getElementById('deleteForm');
         const usernameSpan = document.getElementById('deleteUsername');
-        
+
         // Set the username in the modal
         usernameSpan.textContent = username;
-        
         // Set the form action URL
         deleteForm.action = "{% url 'adminpanel:delete_user' 0 %}".replace('0', userId);
-        
+
+        // Scroll to the middle of the page
+        window.scrollTo({
+            top: document.documentElement.scrollHeight / 2 - window.innerHeight / 2,
+            behavior: 'smooth'
+        });
+
         // Show the modal - use display flex to center it
         modal.style.display = 'flex';
         modal.classList.remove('hidden');
-        
         // Prevent body scroll
         document.body.style.overflow = 'hidden';
-    }
+        }
     
     // Close delete modal
     function closeDeleteModal() {
@@ -433,6 +412,7 @@ Manage Users
             });
         }
     });
+
 </script>
 
 <style>
@@ -473,6 +453,7 @@ Manage Users
   .alert.error { background: #ef4444; }
   .alert.success { background: #10b981; }
   .alert.info { background: #1e88e5; }
+
 
 </style>
 {% endblock %}
