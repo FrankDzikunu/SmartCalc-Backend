@@ -17,6 +17,8 @@ DEBUG = os.getenv("DEBUG", "True") == "True"
 # Allowed hosts
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "").split(",")
 
+DJANGO_SETTINGS_MODULE = core.settings
+
 
 # Application definition
 INSTALLED_APPS = [
@@ -45,6 +47,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'core.urls'
@@ -137,6 +140,9 @@ USE_TZ = True
 # Static files
 STATIC_URL = '/static/'
 
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
@@ -162,7 +168,7 @@ SIMPLE_JWT = {
 # CORS setup
 CORS_ALLOW_ALL_ORIGINS = True
 
-
+# Logging configuration
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
