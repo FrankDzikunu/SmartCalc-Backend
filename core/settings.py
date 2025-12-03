@@ -17,7 +17,6 @@ DEBUG = os.getenv("DEBUG", "True") == "True"
 # Allowed hosts
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "").split(",")
 
-DJANGO_SETTINGS_MODULE = core.settings
 
 
 # Application definition
