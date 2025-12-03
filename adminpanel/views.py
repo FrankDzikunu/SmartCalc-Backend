@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.models import User
+from django.core.paginator import Paginator
 from django.contrib import messages
 from django.views.decorators.csrf import csrf_protect
 from django.conf import settings
@@ -73,15 +74,23 @@ def dashboard(request):
 # --- List Users ---
 @admin_required
 def user_list(request):
-    users = User.objects.order_by('-date_joined')
-    admin_count = users.filter(is_staff=True, is_superuser=False).count()
-    superadmin_count = users.filter(is_superuser=True).count()
-    regular_count = users.filter(is_staff=False, is_superuser=False).count()
+    all_users = User.objects.order_by('-date_joined')
+
+    # Counts from the full queryset
+    admin_count = all_users.filter(is_staff=True, is_superuser=False).count()
+    superadmin_count = all_users.filter(is_superuser=True).count()
+    regular_count = all_users.filter(is_staff=False, is_superuser=False).count()
+
+    # Pagination
+    paginator = Paginator(all_users, 10)  # 10 users per page
+    page_number = request.GET.get('page')
+    users = paginator.get_page(page_number)
+
     return render(request, "adminpanel/user_list.html", {
         "users": users,
-        "admin_count": admin_count + superadmin_count,
+        "admin_count": admin_count + superadmin_count,  # total admins
         "regular_count": regular_count,
-    }) 
+    })
 
 
 # --- Add Regular User ---
@@ -103,7 +112,7 @@ def add_user(request):
                 email=email,
                 password=password,
                 is_staff=is_admin,
-                is_superuser=is_admin
+                is_superuser= False
             )
             messages.success(request, f"User '{username}' created successfully!")
             return redirect('adminpanel:user_list')
