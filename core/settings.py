@@ -161,3 +161,33 @@ SIMPLE_JWT = {
 
 # CORS setup
 CORS_ALLOW_ALL_ORIGINS = True
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+
+    'formatters': {
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
+    },
+
+    'handlers': {
+        'file': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs/system_errors.log'),
+            'formatter': 'simple',
+        },
+    },
+
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+    },
+}

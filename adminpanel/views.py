@@ -1,19 +1,21 @@
+import os
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.views.decorators.csrf import csrf_protect
+from django.conf import settings
 
-# --- Helper: Only superusers can access ---
+# --- Helper: Only admin can access ---
 def admin_required(view_func):
-    decorated_view = login_required(user_passes_test(lambda u: u.is_superuser)(view_func))
+    decorated_view = login_required(user_passes_test(lambda u: u.is_staff)(view_func))
     return decorated_view
 
 # --- Admin Login ---
 @csrf_protect
 def admin_login(request):
-    if request.user.is_authenticated and request.user.is_superuser:
+    if request.user.is_authenticated and request.user.is_staff:
         return redirect('adminpanel:dashboard')
 
     if request.method == 'POST':
@@ -28,7 +30,7 @@ def admin_login(request):
             username = identifier
 
         user = authenticate(request, username=username, password=password)
-        if user and user.is_superuser:
+        if user and user.is_staff:
             login(request, user)
             return redirect('adminpanel:dashboard')
         else:
@@ -45,10 +47,18 @@ def admin_logout(request):
 # --- Dashboard ---
 @admin_required
 def dashboard(request):
+    error_log_path = os.path.join(settings.BASE_DIR, "logs/system_errors.log")
+
+    last_error = None
+    if os.path.exists(error_log_path):
+        with open(error_log_path, "r") as f:
+            lines = f.readlines()
+            last_error = lines[-1].strip() if lines else None
+
     users = User.objects.order_by('-date_joined')
     total_users = User.objects.count()
-    total_admins = User.objects.filter(is_superuser=True).count()
-    regular_count = users.filter(is_superuser=False).count()
+    total_admins = User.objects.filter(is_staff=True).count()
+    regular_count = users.filter(is_staff=False, is_superuser=False).count()
     recent_users = User.objects.order_by('-date_joined')[:5]
 
     context = {
@@ -56,6 +66,7 @@ def dashboard(request):
         "total_admins": total_admins,
         "recent_users": recent_users,
         "regular_count": regular_count,
+        "last_error": last_error,
     }
     return render(request, 'adminpanel/dashboard.html', context)
 
@@ -63,11 +74,12 @@ def dashboard(request):
 @admin_required
 def user_list(request):
     users = User.objects.order_by('-date_joined')
-    admin_count = users.filter(is_superuser=True).count()
-    regular_count = users.filter(is_superuser=False).count()
+    admin_count = users.filter(is_staff=True, is_superuser=False).count()
+    superadmin_count = users.filter(is_superuser=True).count()
+    regular_count = users.filter(is_staff=False, is_superuser=False).count()
     return render(request, "adminpanel/user_list.html", {
         "users": users,
-        "admin_count": admin_count,
+        "admin_count": admin_count + superadmin_count,
         "regular_count": regular_count,
     }) 
 
@@ -113,7 +125,7 @@ def add_admin(request):
         else:
             user = User.objects.create_user(username=username, email=email, password=password)
             user.is_staff = True
-            user.is_superuser = True
+            user.is_superuser = False
             user.save()
             messages.success(request, f'Admin "{username}" created successfully.')
             return redirect('adminpanel:dashboard')
@@ -128,12 +140,12 @@ def delete_user(request, user_id):
 
     # Prevent deleting superuser
     if user.is_superuser:
-        messages.error(request, "You cannot delete a superuser!")
+        messages.error(request, "You cannot delete a super admin!")
         return redirect('adminpanel:user_list')
 
     # Prevent admin from deleting other admins
-    if user.is_staff and not current_user.is_superuser:
-        messages.error(request, "Only a superuser can delete other admins!")
+    if user.is_staff and not user.is_superuser and not current_user.is_superuser:
+        messages.error(request, "Only a super admin can delete other admins!")
         return redirect('adminpanel:user_list')
 
     if request.method == 'POST':

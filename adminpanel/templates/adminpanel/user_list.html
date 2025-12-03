@@ -186,7 +186,7 @@ Manage Users
 
             <tbody>
                 {% for user in users %}
-                <tr data-role="{% if user.is_superuser %}admin{% else %}user{% endif %}">
+                <tr data-role="{% if user.is_superuser %}superadmin{% elif user.is_staff %}admin{% else %}user{% endif %}">
                     <!-- Username with Avatar -->
                     <td>
                         <div style="display: flex; align-items: center; gap: 14px;">
@@ -206,19 +206,24 @@ Manage Users
                     </td>
 
                     <!-- Role Badge -->
-                    <td>
-                        {% if user.is_superuser %}
-                            <span class="badge badge-admin" style="display: inline-flex; align-items: center; gap: 6px;">
-                                <i class="fa fa-crown"></i>
-                                Admin
-                            </span>
-                        {% else %}
-                            <span class="badge badge-user" style="display: inline-flex; align-items: center; gap: 6px;">
-                                <i class="fa fa-user-circle"></i>
-                                User
-                            </span>
-                        {% endif %}
-                    </td>
+                        <td>
+                            {% if user.is_superuser %}
+                                <span class="badge badge-admin" style="display: inline-flex; align-items: center; gap: 6px;">
+                                    <i class="fa fa-crown"></i>
+                                    Super Admin
+                                </span>
+                            {% elif user.is_staff %}
+                                <span class="badge badge-admin" style="display: inline-flex; align-items: center; gap: 6px;">
+                                    <i class="fa fa-shield-alt"></i>
+                                    Admin
+                                </span>
+                            {% else %}
+                                <span class="badge badge-user" style="display: inline-flex; align-items: center; gap: 6px;">
+                                    <i class="fa fa-user-circle"></i>
+                                    User
+                                </span>
+                            {% endif %}
+                        </td>
 
                     <!-- Created Date -->
                     <td style="color: #64748b; font-size: 14px;">

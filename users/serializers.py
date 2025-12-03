@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'is_staff']
+        fields = ['id', 'username', 'email', 'is_staff', 'is_superuser']
 
 
 class CreateUserSerializer(serializers.ModelSerializer):
@@ -13,7 +13,7 @@ class CreateUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'password', 'is_staff']
+        fields = ['username', 'email', 'password', 'is_staff', 'is_superuser']
 
     def create(self, validated_data):
         # Create user with hashed password
@@ -23,8 +23,9 @@ class CreateUserSerializer(serializers.ModelSerializer):
             password=validated_data['password']
         )
 
-        # Optionally set staff/admin status
+        # Set staff/admin status
         user.is_staff = validated_data.get('is_staff', False)
+        user.is_superuser = validated_data.get('is_superuser', False)
         user.save()
 
         return user
