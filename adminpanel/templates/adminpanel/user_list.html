@@ -247,6 +247,29 @@ Manage Users
         </table>
     </div>
 
+        <!-- PAGINATION -->
+    <div class="pagination-container" style="display:flex; justify-content:center; margin-top: 24px; gap: 8px; flex-wrap: wrap;">
+        {% if users.has_previous %}
+            <a href="?page={{ users.previous_page_number }}" class="pagination-btn">&laquo; Prev</a>
+        {% else %}
+            <span class="pagination-btn disabled">&laquo; Prev</span>
+        {% endif %}
+
+        {% for num in users.paginator.page_range %}
+            {% if users.number == num %}
+                <span class="pagination-btn active">{{ num }}</span>
+            {% elif num > users.number|add:-3 and num < users.number|add:3 %}
+                <a href="?page={{ num }}" class="pagination-btn">{{ num }}</a>
+            {% endif %}
+        {% endfor %}
+
+        {% if users.has_next %}
+            <a href="?page={{ users.next_page_number }}" class="pagination-btn">Next &raquo;</a>
+        {% else %}
+            <span class="pagination-btn disabled">Next &raquo;</span>
+        {% endif %}
+    </div>
+
     {% else %}
     <!-- Empty State -->
     <div style="text-align: center; padding: 80px 20px;">
@@ -459,6 +482,39 @@ Manage Users
   .alert.success { background: #10b981; }
   .alert.info { background: #1e88e5; }
 
+    /* Pagination styles */
+    .pagination-btn {
+        padding: 10px 16px;
+        border-radius: 8px;
+        border: 1px solid #e2e8f0;
+        background: white;
+        color: #64748b;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .pagination-btn:hover {
+        background: linear-gradient(135deg, #1e88e5, #0891b2);
+        color: white;
+        border-color: transparent;
+    }
+
+    .pagination-btn.active {
+        background: linear-gradient(135deg, #1e88e5, #0891b2);
+        color: white;
+        border-color: transparent;
+        cursor: default;
+    }
+
+    .pagination-btn.disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
 
 </style>
 {% endblock %}
