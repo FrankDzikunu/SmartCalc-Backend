@@ -7,6 +7,10 @@ from django.core.paginator import Paginator
 from django.contrib import messages
 from django.views.decorators.csrf import csrf_protect
 from django.conf import settings
+from django.utils import timezone
+from django.db.models.functions import TruncMonth
+from django.db.models import Count
+from datetime import timedelta
 
 # --- Helper: Only admin can access ---
 def admin_required(view_func):
@@ -56,6 +60,27 @@ def dashboard(request):
             lines = f.readlines()
             last_error = lines[-1].strip() if lines else None
 
+    # USERS DATA
+    now = timezone.now()
+    first_day_this_month = now.replace(day=1)
+    first_day_last_month = (first_day_this_month - timedelta(days=1)).replace(day=1)
+
+    # Users created this month
+    users_this_month = User.objects.filter(date_joined__gte=first_day_this_month).count()
+
+    # Users created last month
+    users_last_month = User.objects.filter(
+        date_joined__gte=first_day_last_month,
+        date_joined__lt=first_day_this_month
+    ).count()
+
+    # Calculate percentage growth
+    if users_last_month == 0:
+        monthly_growth = 100 if users_this_month > 0 else 0
+    else:
+        monthly_growth = round(((users_this_month - users_last_month) / users_last_month) * 100, 2)
+
+    # Other statistics
     users = User.objects.order_by('-date_joined')
     total_users = User.objects.count()
     total_admins = User.objects.filter(is_staff=True).count()
@@ -68,6 +93,7 @@ def dashboard(request):
         "recent_users": recent_users,
         "regular_count": regular_count,
         "last_error": last_error,
+        "monthly_growth": monthly_growth,  
     }
     return render(request, 'adminpanel/dashboard.html', context)
 

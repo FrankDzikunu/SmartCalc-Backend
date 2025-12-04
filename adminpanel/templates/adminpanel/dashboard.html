@@ -50,7 +50,15 @@ Dashboard Overview
                         <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
                     </svg>
                 </div>
-                <span class="badge badge-success" style="font-size: 11px;">+12% this month</span>
+                    <span class="badge badge-success" style="font-size: 11px;">
+                        {% if monthly_growth > 0 %}
+                            +{{ monthly_growth }}% this month
+                        {% elif monthly_growth < 0 %}
+                            <span style="color: red;">{{ monthly_growth }}% this month</span>
+                        {% else %}
+                            0% this month
+                        {% endif %}
+                    </span>
             </div>
             
             <h3 style="font-size: 15px; font-weight: 600; color: #64748b; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">
