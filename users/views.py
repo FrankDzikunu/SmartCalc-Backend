@@ -3,6 +3,8 @@ from django.contrib.auth.models import User
 from .serializers import UserSerializer, CreateUserSerializer
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework.response import Response
 
 
 class IsAdmin(permissions.BasePermission):
@@ -38,3 +40,14 @@ class MeView(APIView):
     def get(self, request):
         serializer = UserSerializer(request.user)
         return Response(serializer.data)
+
+class CustomLoginView(TokenObtainPairView):
+    def post(self, request, *args, **kwargs):
+        response = super().post(request, *args, **kwargs)
+        data = response.data
+
+        # this Convert JWT response to your mobile app format
+        return Response({
+            "token": data.get("access"),
+            "refresh": data.get("refresh")
+        })
