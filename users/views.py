@@ -48,7 +48,7 @@ class CustomLoginView(TokenObtainPairView):
         response = super().post(request, *args, **kwargs)
         data = response.data
 
-        # this Convert JWT response to your mobile app format
+        # this Convert JWT response to mobile app format
         return Response({
             "token": data.get("access"),
             "refresh": data.get("refresh")
