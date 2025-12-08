@@ -1,5 +1,7 @@
-from rest_framework import serializers
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from django.contrib.auth.models import User
+from django.contrib.auth import authenticate
+from rest_framework import serializers
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -29,3 +31,30 @@ class CreateUserSerializer(serializers.ModelSerializer):
         user.save()
 
         return user
+
+class CustomLoginSerializer(TokenObtainPairSerializer):
+    username_field = User.USERNAME_FIELD
+
+    def validate(self, attrs):
+        identifier = attrs.get("username")  # can be username OR email
+        password = attrs.get("password")
+
+        # Try login with email
+        try:
+            user_obj = User.objects.get(email=identifier)
+            username = user_obj.username
+        except User.DoesNotExist:
+            username = identifier  # treat it as username
+
+        user = authenticate(username=username, password=password)
+
+        if not user:
+            raise serializers.ValidationError("Invalid username/email or password")
+
+        # Generate JWT Token
+        refresh = self.get_token(user)
+
+        return {
+            "refresh": str(refresh),
+            "access": str(refresh.access_token),
+        }
