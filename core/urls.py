@@ -15,4 +15,7 @@ urlpatterns = [
     # Users app
     path('api/users/', include('users.urls')),
     path('', include('adminpanel.urls')),
+
+    # Announcements app
+    path('api/announcements/', include('announcements.urls')),
 ]
