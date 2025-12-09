@@ -6,9 +6,8 @@ class Announcement(models.Model):
     A simple announcement message that the mobile app will fetch.
     """
     title = models.CharField(max_length=200, blank=True)
-    message = models.TextField(help_text="The message to display in the modal.")
+    message = models.TextField(help_text="The message to display in the app.")
     link = models.URLField(
-        max_length=1000,
         blank=True,
         help_text="Link to app update (Play Store / App Store / direct)."
     )
