@@ -1,4 +1,9 @@
 # SmartCalc-Backend
+ssh valifea1@50.6.18.74
+ 
+password: 6elxJ6nyNrzAerPy
+
+cd SmartCalc
 
 pip freeze > requirements.txt
 
