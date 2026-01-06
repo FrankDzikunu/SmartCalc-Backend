@@ -106,5 +106,4 @@ Traceback (most recent call last):
   File "C:\Users\DFRANK\OneDrive - Vanguard Life Assurance\Documents\GitHub\SmartCalc-Backend\venv\Lib\site-packages\django\db\backends\sqlite3\base.py", line 360, in execute
     return super().execute(query, params)
            ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
-django.db.utils.OperationalError: no such table: announcements_announcement
-ERROR "POST /django-admin/announcements/announcement/add/ HTTP/1.1" 500 219197
+
