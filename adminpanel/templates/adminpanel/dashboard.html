@@ -344,19 +344,24 @@ Dashboard Overview
 
                     <td class="text-muted">{{ user.email }}</td>
 
-                    <td>
-                        {% if user.is_superuser %}
-                            <span class="badge badge-admin">
-                                <i class="fa-solid fa-crown badge-icon"></i>
-                                Admin
-                            </span>
-                        {% else %}
-                            <span class="badge badge-user">
-                                <i class="fa-solid fa-user badge-icon"></i>
-                                User
-                            </span>
-                        {% endif %}
-                    </td>
+                        <td>
+                            {% if user.is_superuser %}
+                                <span class="badge badge-admin" style="display: inline-flex; align-items: center; gap: 6px;">
+                                    <i class="fa fa-crown"></i>
+                                    Super Admin
+                                </span>
+                            {% elif user.is_staff %}
+                                <span class="badge badge-admin" style="display: inline-flex; align-items: center; gap: 6px;">
+                                    <i class="fa fa-shield-alt"></i>
+                                    Admin
+                                </span>
+                            {% else %}
+                                <span class="badge badge-user" style="display: inline-flex; align-items: center; gap: 6px;">
+                                    <i class="fa fa-user-circle"></i>
+                                    User
+                                </span>
+                            {% endif %}
+                        </td>
 
                     <td class="text-muted">
                         <div class="date-cell">
