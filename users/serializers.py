@@ -36,25 +36,31 @@ class CustomLoginSerializer(TokenObtainPairSerializer):
     username_field = User.USERNAME_FIELD
 
     def validate(self, attrs):
-        identifier = attrs.get("username")  # can be username OR email
+        identifier = attrs.get("username")  # username OR email
         password = attrs.get("password")
 
-        # Try login with email
+        # Resolve email → username
         try:
             user_obj = User.objects.get(email=identifier)
             username = user_obj.username
         except User.DoesNotExist:
-            username = identifier  # treat it as username
+            username = identifier
 
         user = authenticate(username=username, password=password)
 
         if not user:
             raise serializers.ValidationError("Invalid username/email or password")
 
-        # Generate JWT Token
+        # REQUIRED for SimpleJWT
+        self.user = user
+
         refresh = self.get_token(user)
 
+        user_profile = getattr(user, 'userprofile', None)
+        must_change_password = user_profile.must_change_password if user_profile else False
         return {
             "refresh": str(refresh),
             "access": str(refresh.access_token),
+            "must_change_password": must_change_password,
         }
+    

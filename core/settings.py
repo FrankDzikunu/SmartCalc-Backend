@@ -33,7 +33,7 @@ INSTALLED_APPS = [
     'corsheaders',
 
     # Local apps
-    'users',
+    'users.apps.UsersConfig',
     'adminpanel',
     'announcements',
 ]
@@ -161,6 +161,9 @@ SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(
         seconds=int(os.getenv("ACCESS_TOKEN_LIFETIME", "3600"))
     ),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=30),
+    'ROTATE_REFRESH_TOKENS': True,    
+    'BLACKLIST_AFTER_ROTATION': True,
     'AUTH_HEADER_TYPES': ('Bearer',),
 }
 
