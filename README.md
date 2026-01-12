@@ -26,3 +26,5 @@ python manage.py runserver
 python manage.py startapp adminpanel
 
 hosting link = https://smartcalc-pv5v.onrender.com/
+
+change password api POST /api/users/change-password/
