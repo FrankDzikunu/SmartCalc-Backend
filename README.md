@@ -28,3 +28,7 @@ python manage.py startapp adminpanel
 hosting link = https://smartcalc-pv5v.onrender.com/
 
 change password api POST /api/users/change-password/
+
+phton anywhere bash overwrith existing file
+git fetch origin
+git reset --hard origin/main
