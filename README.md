@@ -32,3 +32,6 @@ change password api POST /api/users/change-password/
 phton anywhere bash overwrith existing file
 git fetch origin
 git reset --hard origin/main
+
+
+load_dotenv('/home/vanguardlife/SmartCalc-Backend/.env')
