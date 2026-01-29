@@ -31,6 +31,29 @@ class CreateUserSerializer(serializers.ModelSerializer):
         user.save()
 
         return user
+    
+class BulkCreateUserSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True)
+
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'password', 'is_staff', 'is_superuser']
+
+    def create(self, validated_data):
+        user = User.objects.create_user(
+            username=validated_data['username'],
+            email=validated_data.get('email', ''),
+            password=validated_data['password']
+        )
+
+        user.is_staff = validated_data.get('is_staff', False)
+        user.is_superuser = validated_data.get('is_superuser', False)
+        user.save()
+
+        # auto-create profile
+        from .models import UserProfile
+        UserProfile.objects.get_or_create(user=user)
+        return user
 
 class CustomLoginSerializer(TokenObtainPairSerializer):
     username_field = User.USERNAME_FIELD

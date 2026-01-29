@@ -9,7 +9,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.response import Response
-from .serializers import CustomLoginSerializer
+from .serializers import CustomLoginSerializer, BulkCreateUserSerializer
 
 
 class IsAdmin(permissions.BasePermission):
@@ -26,6 +26,26 @@ class CreateUserView(generics.CreateAPIView):
     serializer_class = CreateUserSerializer
     permission_classes = [permissions.IsAuthenticated, IsAdmin]
 
+class BulkCreateUserView(APIView):
+    """
+    Admin-only endpoint for creating multiple users at once.
+    """
+    permission_classes = [permissions.IsAuthenticated, IsAdmin]
+
+    def post(self, request):
+        serializer = BulkCreateUserSerializer(
+            data=request.data,
+            many=True
+        )
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(
+                {"detail": "Users created successfully"},
+                status=status.HTTP_201_CREATED
+            )
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class UserListView(generics.ListAPIView):
     """

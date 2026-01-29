@@ -35,3 +35,5 @@ git reset --hard origin/main
 
 
 load_dotenv('/home/vanguardlife/SmartCalc-Backend/.env')
+
+/api/users/bulk-create/
