@@ -117,28 +117,46 @@ Manage Users
 ================================ -->
 <div class="glass" style="margin-bottom: 24px;">
     <div style="display: flex; gap: 16px; align-items: center; flex-wrap: wrap;">
-        <!-- Search Input -->
-        <div style="flex: 1; min-width: 280px; position: relative;">
-            <i class="fa fa-search" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #64748b; font-size: 18px;"></i>
-            <input type="search" 
-                   id="userSearch" 
-                   placeholder="Search by username, email, or role..." 
-                   data-table-id="userTable"
-                   style="width: 100%; padding: 14px 16px 14px 46px; border-radius: 12px; border: 2px solid #e2e8f0; font-size: 15px;">
-        </div>
+            <!-- Search Form -->
+            <form method="get" style="flex: 1; min-width: 280px; position: relative;">
+                <i class="fa fa-search" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #64748b; font-size: 18px;"></i>
+                <input type="search" 
+                    name="q"
+                    value="{{ query }}"
+                    placeholder="Search by username or email..." 
+                    style="width: 100%; padding: 14px 16px 14px 46px; border-radius: 12px; border: 2px solid #e2e8f0; font-size: 15px;">
+            </form>
+
         
-        <!-- Filter Buttons -->
-        <div style="display: flex; gap: 10px;">
-            <button onclick="filterByRole('all')" class="filter-btn active" data-filter="all" style="padding: 12px 20px; border-radius: 10px; border: 2px solid #e2e8f0; background: linear-gradient(135deg, #1e88e5, #0891b2); color: white; font-weight: 500; cursor: pointer; transition: all 0.3s;">
-                All Users
-            </button>
-            <button onclick="filterByRole('admin')" class="filter-btn" data-filter="admin" style="padding: 12px 20px; border-radius: 10px; border: 2px solid #e2e8f0; background: white; color: #64748b; font-weight: 500; cursor: pointer; transition: all 0.3s;">
-                Admins
-            </button>
-            <button onclick="filterByRole('user')" class="filter-btn" data-filter="user" style="padding: 12px 20px; border-radius: 10px; border: 2px solid #e2e8f0; background: white; color: #64748b; font-weight: 500; cursor: pointer; transition: all 0.3s;">
-                Users
-            </button>
-        </div>
+            <!-- Filter Buttons -->
+            <div style="display: flex; gap: 10px;">
+                {% comment %} Create a list of roles with labels {% endcomment %}
+                {% for item in roles %}
+                    <form method="get" style="margin:0;">
+                        <input type="hidden" name="role" value="{{ item.key }}">
+                        <input type="hidden" name="q" value="{{ query }}">
+                        <button type="submit"
+                            class="filter-btn {% if role_filter == item.key %}active{% endif %}"
+                            style="
+                                padding: 12px 20px; 
+                                border-radius: 10px; 
+                                border: 2px solid #e2e8f0; 
+                                {% if role_filter == item.key %}
+                                    background: linear-gradient(135deg, #1e88e5, #0891b2); 
+                                    color: white;
+                                {% else %}
+                                    background: white; 
+                                    color: #64748b;
+                                {% endif %}
+                                font-weight: 500; cursor: pointer; transition: all 0.3s;
+                            ">
+                            {{ item.label }}
+                        </button>
+                    </form>
+                {% endfor %}
+            </div>
+
+
     </div>
 </div>
 
@@ -431,15 +449,6 @@ Manage Users
         });
     }
     
-    // Enhanced search with debouncing
-    document.addEventListener('DOMContentLoaded', function() {
-        const searchInput = document.getElementById('userSearch');
-        if (searchInput) {
-            searchInput.addEventListener('input', function() {
-                filterTable('userSearch', 'userTable');
-            });
-        }
-    });
 
 </script>
 

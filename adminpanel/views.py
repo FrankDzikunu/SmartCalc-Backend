@@ -11,6 +11,8 @@ from django.utils import timezone
 from django.db.models.functions import TruncMonth
 from django.db.models import Count
 from datetime import timedelta
+from django.db.models import Q
+from django.shortcuts import render
 
 # --- Helper: Only admin can access ---
 def admin_required(view_func):
@@ -100,23 +102,56 @@ def dashboard(request):
 # --- List Users ---
 @admin_required
 def user_list(request):
+    query = request.GET.get('q', '')  # search query
+    role_filter = request.GET.get('role', 'all')  # role filter from buttons
+
+    # Start with all users
     all_users = User.objects.order_by('-date_joined')
 
-    # Counts from the full queryset
-    admin_count = all_users.filter(is_staff=True, is_superuser=False).count()
-    superadmin_count = all_users.filter(is_superuser=True).count()
-    regular_count = all_users.filter(is_staff=False, is_superuser=False).count()
+    # Apply search filter
+    if query:
+        all_users = all_users.filter(
+            Q(username__icontains=query) | Q(email__icontains=query)
+        )
+
+    # Apply role filter
+    if role_filter == 'admin':
+        all_users = all_users.filter(is_staff=True, is_superuser=False)
+    elif role_filter == 'superadmin':
+        all_users = all_users.filter(is_superuser=True)
+    elif role_filter == 'user':
+        all_users = all_users.filter(is_staff=False, is_superuser=False)
+    # 'all' shows all users, no filter needed
+
+    # Counts for info boxes
+    admin_count = User.objects.filter(is_staff=True, is_superuser=False).count()
+    superadmin_count = User.objects.filter(is_superuser=True).count()
+    regular_count = User.objects.filter(is_staff=False, is_superuser=False).count()
 
     # Pagination
-    paginator = Paginator(all_users, 10)  # 10 users per page
+    paginator = Paginator(all_users, 10)
     page_number = request.GET.get('page')
     users = paginator.get_page(page_number)
 
-    return render(request, "adminpanel/user_list.html", {
+    # Roles for filter buttons
+    roles = [
+        {"key": "all", "label": "All Users"},
+        {"key": "admin", "label": "Admins"},
+        {"key": "superadmin", "label": "Super Admins"},
+        {"key": "user", "label": "Users"},
+    ]
+
+    context = {
         "users": users,
-        "admin_count": admin_count + superadmin_count,  # total admins
+        "admin_count": admin_count + superadmin_count,
         "regular_count": regular_count,
-    })
+        "query": query,
+        "role_filter": role_filter,
+        "roles": roles,  # pass roles to template
+    }
+
+    return render(request, "adminpanel/user_list.html", context)
+
 
 
 # --- Add Regular User ---
@@ -190,3 +225,4 @@ def delete_user(request, user_id):
         return redirect('adminpanel:user_list')
 
     return render(request, 'adminpanel/delete_user.html', {'user': user})
+
