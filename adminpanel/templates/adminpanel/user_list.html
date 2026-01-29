@@ -28,7 +28,8 @@ Manage Users
             View and manage all system users
         </p>
     </div>
-    
+   <div style="display: flex; gap: 12px; flex-wrap: wrap;"> 
+   
     <a href="{% url 'adminpanel:add_user' %}" class="btn btn-primary" style="display: flex; align-items: center; gap: 10px; white-space: nowrap;">
         <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
@@ -38,6 +39,13 @@ Manage Users
         </svg>
         Add New User
     </a>
+
+    <a href="{% url 'adminpanel:user_list' %}" class="btn btn-secondary" style="display: flex; align-items: center; gap: 8px;">
+        <i class="fas fa-sync-alt" style="font-size: 16px;"></i>
+        Refresh
+    </a>
+</div>
+
 </div>
 
 <!-- ================================
@@ -126,7 +134,6 @@ Manage Users
                     placeholder="Search by username or email..." 
                     style="width: 100%; padding: 14px 16px 14px 46px; border-radius: 12px; border: 2px solid #e2e8f0; font-size: 15px;">
             </form>
-
         
             <!-- Filter Buttons -->
             <div style="display: flex; gap: 10px;">
@@ -155,8 +162,6 @@ Manage Users
                     </form>
                 {% endfor %}
             </div>
-
-
     </div>
 </div>
 
@@ -268,7 +273,7 @@ Manage Users
         <!-- PAGINATION -->
     <div class="pagination-container" style="display:flex; justify-content:center; margin-top: 24px; gap: 8px; flex-wrap: wrap;">
         {% if users.has_previous %}
-            <a href="?page={{ users.previous_page_number }}" class="pagination-btn">&laquo; Prev</a>
+            <a href="?page={{ users.previous_page_number }}&q={{ query }}&role={{ role_filter }}" class="pagination-btn">&laquo; Prev</a>
         {% else %}
             <span class="pagination-btn disabled">&laquo; Prev</span>
         {% endif %}
@@ -277,16 +282,17 @@ Manage Users
             {% if users.number == num %}
                 <span class="pagination-btn active">{{ num }}</span>
             {% elif num > users.number|add:-3 and num < users.number|add:3 %}
-                <a href="?page={{ num }}" class="pagination-btn">{{ num }}</a>
+                <a href="?page={{ num }}&q={{ query }}&role={{ role_filter }}" class="pagination-btn">{{ num }}</a>
             {% endif %}
         {% endfor %}
 
         {% if users.has_next %}
-            <a href="?page={{ users.next_page_number }}" class="pagination-btn">Next &raquo;</a>
+            <a href="?page={{ users.next_page_number }}&q={{ query }}&role={{ role_filter }}" class="pagination-btn">Next &raquo;</a>
         {% else %}
             <span class="pagination-btn disabled">Next &raquo;</span>
         {% endif %}
     </div>
+
 
     {% else %}
     <!-- Empty State -->
